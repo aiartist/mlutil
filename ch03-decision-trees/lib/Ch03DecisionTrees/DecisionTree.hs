@@ -17,16 +17,16 @@ module Ch03DecisionTrees.DecisionTree
 
 import qualified Data.Map as M
 import qualified Data.Set as S
+import           MLUtil.Graphics
 
-newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
-
-newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
+data Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
+instance ArrowLabel Feature where
+    arrowLabel (F x) = Just (show x)
 
 type Record = ([Feature], Class)
 
-newtype Label = L { unLabel :: String } deriving (Eq, Show)
-
-data DecisionTree = Leaf Class | Node Label (M.Map Feature DecisionTree) deriving (Eq, Show)
+--data DecisionTree = Leaf Class | Node Label (M.Map Feature DecisionTree) deriving (Eq, Show)
+type DecisionTree = Tree Feature
 
 deleteAt :: Int -> [a] -> [a]
 deleteAt idx xs =
@@ -99,10 +99,10 @@ mkDecisionTree dataSet labels =
                     labels' = deleteAt bestFeat labels
                     featValues = [features !! bestFeat | (features, _) <- dataSet]
                     uniqueVals = S.fromList featValues
-                    m = foldr (\value m' ->
+                    childTrees = foldr (\value cts ->
                         let sp = splitDataSet dataSet bestFeat value
                             subtree = mkDecisionTree sp labels'
-                        in M.insert value subtree m')
-                        M.empty
+                        in (subtree, value) : cts)
+                        []
                         uniqueVals
-                in Node bestFeatLabel m
+                in Node bestFeatLabel childTrees

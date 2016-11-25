@@ -2,6 +2,8 @@
 
 module MLUtil.Graphics.Flowchart
     ( ArrowLabel (..)
+    , Class (..)
+    , Label (..)
     , Tree (..)
     , flowchart
     ) where
@@ -14,8 +16,14 @@ type Size = (Measure, Measure)
 class ArrowLabel a where
     arrowLabel :: a -> Maybe String
 
--- TODO: Not happy with the tuple
-data Tree a = Leaf String | Node String [(Tree a, a)] deriving Show
+-- TODO: Rename this to make it less specific to decision trees
+newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
+
+-- TODO: Rename this to make it less specific to decision trees
+newtype Label = L { unLabel :: String } deriving (Eq, Show)
+
+-- TODO: Not happy with the tuple since we don't use a for anything except ArrowLabel
+data Tree a = Leaf Class | Node Label [(Tree a, a)] deriving Show
 
 data FlowchartLayout = FlowchartLayout
     { boxInnerWidth :: Measure
@@ -34,7 +42,7 @@ flowchart :: ArrowLabel a => Tree a -> Diagram
 flowchart = fst . (flowchartHelper defaultFlowchartLayout)
 
 flowchartHelper :: ArrowLabel a => FlowchartLayout -> Tree a -> DiagramWithSize
-flowchartHelper layout (Leaf s) = (leafBox layout s, (boxOuterWidth layout, boxOuterHeight layout))
+flowchartHelper layout (Leaf s) = (leafBox layout (unClass s), (boxOuterWidth layout, boxOuterHeight layout))
 flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childTreesWithArrowLabels) =
     let
         boxOuterWidth' = boxOuterWidth layout
@@ -67,7 +75,7 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childTreesWithArrowLa
         height = maxHeight + boxOuterHeight'
     in
         (mconcat $
-            nodeBox layout nodeLabel # moveTo (p2 (0, 0)) :
+            nodeBox layout (unLabel nodeLabel) # moveTo (p2 (0, 0)) :
             childDiagrams ++
             arrows ++
             arrowLabels

@@ -16,13 +16,13 @@ library
   hs-source-dirs:             lib
   default-language:           Haskell2010
   exposed-modules:            Ch03DecisionTrees.DecisionTree
-                            , Ch03DecisionTrees.Flowchart
   build-depends:              SVGFonts
                             , base
                             , containers
                             , diagrams-core
                             , diagrams-lib
                             , diagrams-svg
+                            , mlutil
                             , split
 
 executable ch03-decision-trees-app
