@@ -1,7 +1,9 @@
 {-# LANGUAGE LambdaCase #-}
 
 module Ch03DecisionTrees.Entropy
-    ( Record
+    ( Class (..)
+    , Label (..)
+    , Record
     , calculateShannonEntropy
     , chooseBestFeatureToSplit
     , majorityCount
@@ -14,7 +16,9 @@ module Ch03DecisionTrees.Entropy
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-type Record = ([Int], String)
+newtype Class = Class { unClass :: String } deriving (Eq, Ord, Show)
+type Record = ([Int], Class)
+newtype Label = Label { unLabel :: String } deriving Show
 
 itemCounts :: Ord a => [a] -> M.Map a Int
 itemCounts = foldr
@@ -63,11 +67,14 @@ chooseBestFeatureToSplit rs =
         [0..featureCount - 1]
 
 -- cf trees.majorityCnt
-majorityCount :: [String] -> (String, Int)
+majorityCount :: [Class] -> (Class, Int)
 majorityCount labels = foldr1
     (\p0@(_, n0) p1@(_, n1) -> if n1 > n0 then p1 else p0)
     (M.toList $ itemCounts labels)
 
 -- cf trees.createTree
-mkDecisionTree :: [Record] -> Int
-mkDecisionTree = length
+mkDecisionTree :: [Record] -> [Label] -> Int
+mkDecisionTree dataSet labels =
+    let classList :: [Class]
+        classList = map snd dataSet
+    in length classList

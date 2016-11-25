@@ -7,15 +7,15 @@ import           DataFiles
 
 dataSet :: [Record]
 dataSet =
-    [ ([1, 1], "yes")
-    , ([1, 1], "yes")
-    , ([1, 0], "no")
-    , ([0, 1], "no")
-    , ([0, 1], "no")
+    [ ([1, 1], Class "yes")
+    , ([1, 1], Class "yes")
+    , ([1, 0], Class "no")
+    , ([0, 1], Class "no")
+    , ([0, 1], Class "no")
     ]
 
-labels :: [String]
-labels = ["no surfacing", "flippers"]
+labels :: [Label]
+labels = Label <$> ["no surfacing", "flippers"]
 
 main :: IO ()
 main = do
