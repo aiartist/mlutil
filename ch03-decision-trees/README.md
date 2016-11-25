@@ -42,3 +42,9 @@ or
 ```ps
 script\env.ps1
 ```
+
+## Licence
+
+[Licensed under the MIT License][licence]
+
+[licence]: LICENSE
