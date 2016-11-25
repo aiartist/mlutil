@@ -1,2 +1,2 @@
-*.svg
-temp/
+.DS_Store
+.stack-work/
