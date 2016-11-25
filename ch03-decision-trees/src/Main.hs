@@ -17,7 +17,11 @@ dataSet =
 labels :: [Label]
 labels = L <$> ["no surfacing", "flippers"]
 
-main :: IO ()
-main = do
+renderFigures :: IO ()
+renderFigures = do
+    -- Figure 3.2
     let c = flowchart (mkDecisionTree dataSet labels)
     renderFlowchartSVG "flowchart.svg" c
+
+main :: IO ()
+main = renderFigures
