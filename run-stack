@@ -1,0 +1,31 @@
+#!/bin/bash
+set -euo pipefail
+IFS=$'\n\t'
+
+script_dir=$(cd $(dirname $0); pwd -P)
+current_dir=$(pwd -P)
+
+function run_stack_command()
+{
+  stack $*
+}
+
+if [[ $# -lt 1 ]]; then
+  echo 'Usage: run-stack <stack-command-arg-0> .. <stack-command-arg-N-1>'
+  exit 1
+fi
+
+echo "cmd: stack $*"
+
+if [[ -z $(find . -name '*.cabal' -maxdepth 1) ]]; then
+  find . -name '*.cabal' | while read cabal_path; do
+      cabal_dir=$(cd $(dirname $cabal_path); pwd -P)
+      echo "dir: $cabal_dir"
+      pushd $cabal_dir > /dev/null
+      run_stack_command $*
+      popd > /dev/null
+  done
+else
+  echo "dir: $current_dir"
+  run_stack_command $*
+fi
