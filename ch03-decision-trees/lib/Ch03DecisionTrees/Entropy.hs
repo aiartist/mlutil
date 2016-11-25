@@ -4,6 +4,7 @@ module Ch03DecisionTrees.Entropy
     ( Record
     , calculateShannonEntropy
     , chooseBestFeatureToSplit
+    , majorityCount
     , splitDataSet
     ) where
 
@@ -14,18 +15,19 @@ import qualified Data.Set as S
 
 type Record = ([Int], String)
 
+itemCounts :: Ord a => [a] -> M.Map a Int
+itemCounts = foldr
+    (M.alter (\case { Nothing -> Just 1; Just n -> Just $ n + 1 }))
+    M.empty
+
 -- cf trees.calcShannonEnt
 calculateShannonEntropy :: [Record] -> Double
 calculateShannonEntropy rs =
     let count = length rs
-        labelCounts = foldr
-                        (\(_, label) m -> M.alter (\case { Nothing -> Just 1; Just n -> Just $ n + 1 }) label m)
-                        M.empty
-                        rs
     in foldr
         (\n entropy -> let prob = probability n count in entropy -  prob * log2 prob)
         0.0
-        labelCounts
+        (itemCounts (map snd rs))
     where probability n count = fromIntegral n / fromIntegral count
           log2 x = logBase 2 x
 
@@ -58,3 +60,9 @@ chooseBestFeatureToSplit rs =
             in if gain > bestGain then (gain, i) else (bestGain, bestIdx))
         (0.0, -1)
         [0..featureCount - 1]
+
+-- cf trees.majorityCnt
+majorityCount :: [String] -> (String, Int)
+majorityCount labels = foldr1
+    (\p0@(_, n0) p1@(_, n1) -> if n1 > n0 then p1 else p0)
+    (M.toList $ itemCounts labels)

@@ -43,5 +43,9 @@ spec = do
             gain `shouldRoundTo` 0.41997
             idx `shouldBe` 0
 
+    describe "majorityCount" $ do
+        it "should get majority count" $ do
+            majorityCount (map snd dataSet) `shouldBe` ("no", 3)
+
 main :: IO ()
 main = hspec spec
