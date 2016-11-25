@@ -1,11 +1,11 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module EntropySpec
+module DecisionTreeSpec
     ( main
     , spec
     ) where
 
-import           Ch03DecisionTrees.Entropy
+import           Ch03DecisionTrees.DecisionTree
 import qualified Data.Map as M
 import           MLUtil.Test
 import           Test.Hspec

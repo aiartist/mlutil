@@ -2,7 +2,7 @@
 
 module Main (main) where
 
-import           Ch03DecisionTrees.Entropy
+import           Ch03DecisionTrees.DecisionTree
 import           DataFiles
 
 dataSet :: [Record]

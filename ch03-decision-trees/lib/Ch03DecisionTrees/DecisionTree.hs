@@ -1,6 +1,6 @@
 {-# LANGUAGE LambdaCase #-}
 
-module Ch03DecisionTrees.Entropy
+module Ch03DecisionTrees.DecisionTree
     ( Class (..)
     , DecisionTree (..)
     , Label (..)

@@ -15,7 +15,7 @@ cabal-version:                >=1.10
 library
   hs-source-dirs:             lib
   default-language:           Haskell2010
-  exposed-modules:            Ch03DecisionTrees.Entropy
+  exposed-modules:            Ch03DecisionTrees.DecisionTree
   build-depends:              base
                             , containers
 
@@ -33,8 +33,8 @@ test-suite spec
   hs-source-dirs:             spec
   default-language:           Haskell2010
   main-is:                    Spec.hs
-  other-modules:              EntropySpec
-                            , DataFiles
+  other-modules:              DataFiles
+                            , DecisionTreeSpec
                             , Paths_ch03_decision_trees
   build-depends:              base
                             , ch03-decision-trees
