@@ -19,8 +19,6 @@ labels = L <$> ["no surfacing", "flippers"]
 
 main :: IO ()
 main = do
-    let e = calculateShannonEntropy dataSet
-        sp = splitDataSet dataSet 0 (F 1)
-        result = chooseBestFeatureToSplit dataSet
-    print result
+    let tree = mkDecisionTree dataSet labels
+    print tree
     putStrLn "Done"
