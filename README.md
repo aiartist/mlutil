@@ -6,6 +6,14 @@ This is a project to translate the code examples in Peter Harrington's [Machine 
 
 I plan to translate as many of the Python examples into Haskell as possible and to create a package of Haskell support functions (tentatively called [`mlutil`][mlutil]). I'll then contribute them to the [DataHaskell][dh] community if they might be of interest to others.
 
+## Supported platforms
+
+The code has been tested on the following platforms:
+
+* Linux (Centos7 and Ubuntu 14.04)
+* OS X 10.10.5
+* Windows 7 and Windows 10
+
 ## Building and testing the code
 
 Individual subprojects may have their own prerequisites, so please consult their respective `README.md` files for more information.
