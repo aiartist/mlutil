@@ -1,9 +1,9 @@
-{-# LANGUAGE MultiParamTypeClasses #-}
-
 module Main (main) where
 
 import           Ch03DecisionTrees.DecisionTree
+import           Ch03DecisionTrees.Flowchart
 import           DataFiles
+import           MLUtil
 
 dataSet :: [Record]
 dataSet =
@@ -19,6 +19,5 @@ labels = L <$> ["no surfacing", "flippers"]
 
 main :: IO ()
 main = do
-    let tree = mkDecisionTree dataSet labels
-    print tree
-    putStrLn "Done"
+    let c = flowchart (mkDecisionTree dataSet labels)
+    renderFlowchartSVG "flowchart.svg" c

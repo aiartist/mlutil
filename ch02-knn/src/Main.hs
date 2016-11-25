@@ -29,19 +29,19 @@ renderFigures = do
     Just m <- readLabelledMatrix dataPath
 
     -- Figure 2.3
-    renderSVG
+    renderChartSVG
         "figure-2.3.svg"
         defaultChartLabels { clTitle = Just "Figure 2.3", clYAxisLabel = Just "Ice cream", clXAxisLabel = Just "Video games" }
         [simplePlot m 1 2]
 
     -- Figure 2.4
-    renderSVG
+    renderChartSVG
         "figure-2.4.svg"
         defaultChartLabels { clTitle = Just "Figure 2.4", clYAxisLabel = Just "Ice cream", clXAxisLabel = Just "Video games" }
         (colouredSeriesPlots m 1 2)
 
     -- Figure 2.5
-    renderSVG
+    renderChartSVG
         "figure-2.5.svg"
         defaultChartLabels { clTitle = Just "Figure 2.5", clYAxisLabel = Just "Video games", clXAxisLabel = Just "Frequent flyer miles" }
         (colouredSeriesPlots m 0 1)
@@ -49,7 +49,7 @@ renderFigures = do
     -- Normalized version of figure 2.5
     let MatrixNormalization{..} = normalizeMatrixColumns (lmValues m)
         m' = m { lmValues = mnValues }
-    renderSVG
+    renderChartSVG
         "figure-2.5-normalized.svg"
         defaultChartLabels { clTitle = Just "Figure 2.5 (normalized)", clYAxisLabel = Just "Video games", clXAxisLabel =  Just "Frequent flyer miles" }
         (colouredSeriesPlots m' 0 1)

@@ -39,6 +39,8 @@ library
                             , Chart-diagrams
                             , base
                             , containers
+                            , diagrams-lib
+                            , diagrams-svg
                             , directory
                             , hmatrix
                             , hspec
