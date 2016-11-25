@@ -3,6 +3,7 @@
 module Ch03DecisionTrees.DecisionTree
     ( Class (..)
     , DecisionTree (..)
+    , Feature (..)
     , Label (..)
     , Record
     , calculateShannonEntropy
@@ -18,11 +19,15 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import           Debug.Trace
 
-newtype Class = Class { unClass :: String } deriving (Eq, Ord, Show)
-type Record = ([Int], Class)
-newtype Label = Label { unLabel :: String } deriving (Eq, Show)
+newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
 
-data DecisionTree = Leaf Class | Node Label (M.Map Int DecisionTree) deriving (Eq, Show)
+newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
+
+type Record = ([Feature], Class)
+
+newtype Label = L { unLabel :: String } deriving (Eq, Show)
+
+data DecisionTree = Leaf Class | Node Label (M.Map Feature DecisionTree) deriving (Eq, Show)
 
 deleteAt :: Int -> [a] -> [a]
 deleteAt idx xs =
@@ -47,7 +52,7 @@ calculateShannonEntropy rs =
 
 -- cf trees.splitDataSet
 -- TODO: Use vector instead of list for O(1) indexing
-splitDataSet :: [Record] -> Int -> Int -> [Record]
+splitDataSet :: [Record] -> Int -> Feature -> [Record]
 splitDataSet rs axis value = map
     (\(xs, l) -> (deleteAt axis xs, l)) $ filter (\(xs, _) -> xs !! axis == value)
     rs
