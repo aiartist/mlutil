@@ -84,7 +84,7 @@ majorityCount labels = foldr1
     (M.toList $ itemCounts labels)
 
 -- cf trees.createTree
--- Enforce non-emptiness
+-- TODO: Enforce non-emptiness
 mkDecisionTree :: [Record] -> [Label] -> DecisionTree
 mkDecisionTree dataSet labels =
     let classList = map snd dataSet
