@@ -34,6 +34,7 @@ executable ch03-decision-trees-app
   build-depends:              base
                             , ch03-decision-trees
                             , containers
+                            , diagrams-svg
                             , mlutil
 
 test-suite spec

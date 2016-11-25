@@ -25,6 +25,9 @@ library
                             , MLUtil.Arithmetic
                             , MLUtil.Charting
                             , MLUtil.Folding
+                            , MLUtil.Graphics
+                            , MLUtil.Graphics.Flowchart
+                            , MLUtil.Graphics.Imports
                             , MLUtil.Imports
                             , MLUtil.LabelledMatrix
                             , MLUtil.LabelledMatrixPlot
