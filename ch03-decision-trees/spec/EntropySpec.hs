@@ -54,12 +54,12 @@ spec = do
     describe "mkDecisionTree" $ do
         it "should create a decision tree" $
             let expectedDT =
-                    DT1
+                    Node
                         (Label "no surfacing")
-                        (M.fromList [(0, DT0 $ Class "no"), (1,
-                        DT1
+                        (M.fromList [(0, Leaf $ Class "no"), (1,
+                        Node
                             (Label "flippers")
-                            (M.fromList [(0, DT0 $ Class "no"), (1, DT0 $ Class "yes")]))])
+                            (M.fromList [(0, Leaf $ Class "no"), (1, Leaf $ Class "yes")]))])
             in mkDecisionTree dataSet labels `shouldBe` expectedDT
 
 main :: IO ()

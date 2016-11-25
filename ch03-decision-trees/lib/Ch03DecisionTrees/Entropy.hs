@@ -22,7 +22,7 @@ newtype Class = Class { unClass :: String } deriving (Eq, Ord, Show)
 type Record = ([Int], Class)
 newtype Label = Label { unLabel :: String } deriving (Eq, Show)
 
-data DecisionTree = DT0 Class | DT1 Label (M.Map Int DecisionTree) deriving (Eq, Show)
+data DecisionTree = Leaf Class | Node Label (M.Map Int DecisionTree) deriving (Eq, Show)
 
 deleteAt :: Int -> [a] -> [a]
 deleteAt idx xs =
@@ -86,9 +86,9 @@ mkDecisionTree dataSet labels =
     let classList = map snd dataSet
         firstClass = head classList
     in if (all (firstClass ==) classList)
-        then DT0 $ firstClass -- Stop splitting when all of the classes are equal
+        then Leaf firstClass -- Stop splitting when all of the classes are equal
         else if (0 == (length . fst . head) dataSet)
-            then DT0 $ fst (majorityCount classList) -- Stop splitting when there are no more features in data set
+            then Leaf $ fst (majorityCount classList) -- Stop splitting when there are no more features in data set
             else
                 let (_, bestFeat) = chooseBestFeatureToSplit dataSet
                     bestFeatLabel = labels !! bestFeat
@@ -102,4 +102,4 @@ mkDecisionTree dataSet labels =
                         in M.insert value subtree m')
                         M.empty
                         uniqueVals
-                in DT1 bestFeatLabel m
+                in Node bestFeatLabel m
