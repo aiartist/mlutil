@@ -6,6 +6,12 @@ This is a project to translate the code examples in Peter Harrington's [Machine 
 
 I plan to translate as many of the Python examples into Haskell as possible and to create a package of Haskell support functions (tentatively called [`mlutil`][mlutil]). I'll then contribute them to the [DataHaskell][dh] community if they might be of interest to others.
 
+## Projects
+
+* [`mlutil`][mlutil]
+* [Programs from chapter 2 of book: k-nearest neighbours algorithm][ch02knn]
+* [Programs from chapter 3 of book: decision trees][ch03decisiontrees]
+
 ## Supported platforms
 
 The code has been tested on the following platforms:
@@ -41,6 +47,8 @@ The `test` script works in a similar manner. I'll write similar companion script
 [Licensed under the MIT License][licence]
 
 [buildscript]: build
+[ch02knn]: ch02-knn/README.md
+[ch03decisiontrees]: ch03-decision-trees/README.md
 [dh]: https://github.com/datahaskell
 [licence]: LICENSE
 [mlutil]: mlutil/README.md
