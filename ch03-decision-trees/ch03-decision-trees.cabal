@@ -38,5 +38,6 @@ test-suite spec
                             , Paths_ch03_decision_trees
   build-depends:              base
                             , ch03-decision-trees
+                            , containers
                             , hspec
                             , mlutil

@@ -6,6 +6,7 @@ module EntropySpec
     ) where
 
 import           Ch03DecisionTrees.Entropy
+import qualified Data.Map as M
 import           MLUtil.Test
 import           Test.Hspec
 
@@ -47,12 +48,19 @@ spec = do
             idx `shouldBe` 0
 
     describe "majorityCount" $ do
-        it "should get majority count" $ do
+        it "should get majority count" $
             majorityCount (map snd dataSet) `shouldBe` (Class "no", 3)
 
     describe "mkDecisionTree" $ do
-        it "should create a decision tree" $ do
-            mkDecisionTree dataSet labels `shouldBe` 5
+        it "should create a decision tree" $
+            let expectedDT =
+                    DT1
+                        (Label "no surfacing")
+                        (M.fromList [(0, DT0 $ Class "no"), (1,
+                        DT1
+                            (Label "flippers")
+                            (M.fromList [(0, DT0 $ Class "no"), (1, DT0 $ Class "yes")]))])
+            in mkDecisionTree dataSet labels `shouldBe` expectedDT
 
 main :: IO ()
 main = hspec spec
