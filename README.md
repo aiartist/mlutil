@@ -6,6 +6,14 @@ This is a project to translate the code examples in Peter Harrington's [Machine 
 
 I plan to translate as many of the Python examples into Haskell as possible and to create a package of Haskell support functions (tentatively called [`mlutil`][mlutil]). I'll then contribute them to the [DataHaskell][dh] community if they might be of interest to others.
 
+Other goals beyond this include:
+
+* Use stronger typing throughout to take advantage of Haskell's strong static typing
+* Refactoring the resulting programs so they are more idiomatic in their use of the Haskell programming language
+* Improvements to the efficiency of the implementations to use closer-to-optimal Haskell data structures
+
+The last point includes refactoring much of the code where I have taken lazy approach of translating code to use Haskell lists. In many cases, this has led to code that make use of the `!!` indexing operator on lists which, given its $O\(n\)$ performance characteristics is not good. Much of the code will be refactored to use [vectors][vectorpackage] and [matrices][hmatrixpackage] as appropriate.
+
 ## Projects
 
 * [`mlutil`][mlutil]
@@ -50,7 +58,9 @@ The `test` script works in a similar manner. I'll write similar companion script
 [ch02knn]: ch02-knn/README.md
 [ch03decisiontrees]: ch03-decision-trees/README.md
 [dh]: https://github.com/datahaskell
+[hmatrixpackage]: https://hackage.haskell.org/package/hmatrix
 [licence]: LICENSE
 [mlutil]: mlutil/README.md
 [pbharrin]: https://github.com/pbharrin/machinelearninginaction
 [testscript]: test
+[vectorpackage]: https://hackage.haskell.org/package/vector
