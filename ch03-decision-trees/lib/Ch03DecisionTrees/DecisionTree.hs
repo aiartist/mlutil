@@ -17,7 +17,6 @@ module Ch03DecisionTrees.DecisionTree
 
 import qualified Data.Map as M
 import qualified Data.Set as S
-import           Debug.Trace
 
 newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
 
@@ -98,8 +97,7 @@ mkDecisionTree dataSet labels =
                 let (_, bestFeat) = chooseBestFeatureToSplit dataSet
                     bestFeatLabel = labels !! bestFeat
                     labels' = deleteAt bestFeat labels
-                    bestFeat' = trace ("bestFeat=" ++ show bestFeat ++ " len=" ++ show ((length . fst . head) dataSet)) bestFeat
-                    featValues = [features !! bestFeat' | (features, _) <- dataSet]
+                    featValues = [features !! bestFeat | (features, _) <- dataSet]
                     uniqueVals = S.fromList featValues
                     m = foldr (\value m' ->
                         let sp = splitDataSet dataSet bestFeat value
