@@ -1,10 +1,12 @@
 {-# LANGUAGE LambdaCase #-}
 
 module Ch03DecisionTrees.Entropy
-    ( Record
+    ( Label
+    , Record
     , calculateShannonEntropy
     , chooseBestFeatureToSplit
     , majorityCount
+    , mkDecisionTree
     , splitDataSet
     ) where
 
@@ -13,7 +15,8 @@ module Ch03DecisionTrees.Entropy
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-type Record = ([Int], String)
+type Label = String
+type Record = ([Int], Label)
 
 itemCounts :: Ord a => [a] -> M.Map a Int
 itemCounts = foldr
@@ -62,7 +65,11 @@ chooseBestFeatureToSplit rs =
         [0..featureCount - 1]
 
 -- cf trees.majorityCnt
-majorityCount :: [String] -> (String, Int)
+majorityCount :: [Label] -> (Label, Int)
 majorityCount labels = foldr1
     (\p0@(_, n0) p1@(_, n1) -> if n1 > n0 then p1 else p0)
     (M.toList $ itemCounts labels)
+
+-- cf trees.createTree
+mkDecisionTree :: [Record] -> Int
+mkDecisionTree = length

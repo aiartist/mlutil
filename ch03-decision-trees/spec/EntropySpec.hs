@@ -47,5 +47,9 @@ spec = do
         it "should get majority count" $ do
             majorityCount (map snd dataSet) `shouldBe` ("no", 3)
 
+    describe "mkDecisionTree" $ do
+        it "should create a decision tree" $ do
+            mkDecisionTree dataSet `shouldBe` 5
+
 main :: IO ()
 main = hspec spec
