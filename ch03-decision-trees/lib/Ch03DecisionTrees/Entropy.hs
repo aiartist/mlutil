@@ -7,6 +7,8 @@ module Ch03DecisionTrees.Entropy
     , splitDataSet
     ) where
 
+-- TODO: Hide the (!!) operator so we can't index into lists!
+
 import qualified Data.Map as M
 import qualified Data.Set as S
 
