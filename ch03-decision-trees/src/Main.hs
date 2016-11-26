@@ -31,7 +31,7 @@ testClassifyAndEncode = do
     let tree = mkDecisionTree dataSet labels
         r = classify tree labels [1, 0]
     print r
-    encodeFile "test.bin" tree
+    --encodeFile "test.bin" tree
 
 class FeatureClass2 a where
 class ClassClass2 a where

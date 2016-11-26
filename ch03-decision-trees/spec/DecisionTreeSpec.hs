@@ -96,6 +96,7 @@ spec = do
         it "should classify [1, 1] as yes" $
             classify tree labels [1, 1] `shouldBe` C "yes"
 
+    {-
     describe "encodeDecisionTree" $ do
         let tree = mkDecisionTree dataSet labels
             bs = encode tree
@@ -103,6 +104,7 @@ spec = do
 
         it "single leaf should roundtrip" $
             tree' `shouldBe` tree
+    -}
 
 main :: IO ()
 main = hspec spec
