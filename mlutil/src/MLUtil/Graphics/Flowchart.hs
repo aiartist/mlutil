@@ -19,10 +19,9 @@ newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
 -- TODO: Rename this to make it less specific to decision trees
 newtype Label = L { unLabel :: String } deriving (Eq, Show)
 
-data Arrow a = A (Tree a) String deriving Show
+data Arrow a = A (Tree a) String deriving (Eq, Show)
 
--- TODO: Not happy with the tuple since we don't use a for anything except ArrowLabel
-data Tree a = Leaf Class | Node Label [Arrow a] deriving Show
+data Tree a = Leaf Class | Node Label [Arrow a] deriving (Eq, Show)
 
 data FlowchartLayout = FlowchartLayout
     { boxInnerWidth :: Measure

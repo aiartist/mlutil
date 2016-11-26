@@ -7,6 +7,7 @@ module DecisionTreeSpec
 
 import           Ch03DecisionTrees.DecisionTree
 import qualified Data.Map as M
+import           MLUtil.Graphics
 import           MLUtil.Test
 import           Test.Hspec
 
@@ -56,10 +57,9 @@ spec = do
             let expectedDT =
                     Node
                         (L "no surfacing")
-                        (M.fromList [(F 0, Leaf $ C "no"), (F 1,
-                        Node
+                        [A (Leaf $ C "no") "0", A (Node
                             (L "flippers")
-                            (M.fromList [(F 0, Leaf $ C "no"), (F 1, Leaf $ C "yes")]))])
+                            [A (Leaf $ C "no") "0", A (Leaf $ C "yes") "1"]) "1"]
             in mkDecisionTree dataSet labels `shouldBe` expectedDT
 
 main :: IO ()
