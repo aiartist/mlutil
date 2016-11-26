@@ -14,7 +14,7 @@ import           MLUtil.Graphics
 import           MLUtil.Test
 import           Test.Hspec
 
-dataSet :: [Record]
+dataSet :: [Record Feature Class]
 dataSet =
     [ (F <$> [1, 1], C "yes")
     , (F <$> [1, 1], C "yes")
@@ -26,10 +26,10 @@ dataSet =
 labels :: [Label]
 labels = L <$> ["no surfacing", "flippers"]
 
-leaf :: String -> DecisionTree
+leaf :: String -> Tree Feature Class Label
 leaf = Leaf . C
 
-node :: String -> [Arrow Feature Class Label] -> DecisionTree
+node :: String -> [Arrow Feature Class Label] -> Tree Feature Class Label
 node = Node . L
 
 spec :: Spec

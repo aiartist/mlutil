@@ -8,7 +8,7 @@ import           MLUtil
 import           MLUtil.Graphics
 import qualified System.IO.Strict as IOS
 
-dataSet :: [Record]
+dataSet :: [Record Feature Class]
 dataSet =
     [ (F <$> [1, 1], C "yes")
     , (F <$> [1, 1], C "yes")

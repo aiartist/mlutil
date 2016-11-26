@@ -2,8 +2,6 @@
 
 module Ch03DecisionTrees.DecisionTree
     ( Class (..)
-    , DecisionTree (..)
-    , DecisionTreeArrow (..)
     , Feature (..)
     , Label (..)
     , Record (..)
@@ -23,26 +21,22 @@ import qualified Data.Set as S
 import           MLUtil.Graphics
 import           MLUtil.Tree
 
--- Arrow
+-- Arrow: Eq a, Ord a
 newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
 instance ArrowLabel Feature where
     alLabel = show . unFeature
 
--- Leaf
+-- Leaf: Eq l, Ord l
 newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
 instance LeafLabel Class where
     llLabel = unClass
 
--- Node
+-- Node: Eq n
 newtype Label = L { unLabel :: String } deriving (Eq, Show)
 instance NodeLabel Label where
     nlLabel = unLabel
 
-type Record = ([Feature], Class)
-
-type DecisionTreeArrow = Arrow Feature Class Label
-
-type DecisionTree = Tree Feature Class Label
+type Record a l = ([a], l)
 
 deleteAt :: Int -> [a] -> [a]
 deleteAt idx xs =
@@ -54,8 +48,14 @@ itemCounts = foldr
     (M.alter (\case { Nothing -> Just 1; Just n -> Just $ n + 1 }))
     M.empty
 
+-- cf trees.majorityCnt
+majorityCount :: Ord a => [a] -> (a, Int)
+majorityCount labels = foldr1
+    (\p0@(_, n0) p1@(_, n1) -> if n1 > n0 then p1 else p0)
+    (M.toList $ itemCounts labels)
+
 -- cf trees.calcShannonEnt
-calculateShannonEntropy :: [Record] -> Double
+calculateShannonEntropy :: Ord l => [Record a l] -> Double
 calculateShannonEntropy rs =
     let count = length rs
     in foldr
@@ -67,14 +67,14 @@ calculateShannonEntropy rs =
 
 -- cf trees.splitDataSet
 -- TODO: Use vector instead of list for O(1) indexing
-splitDataSet :: [Record] -> Int -> Feature -> [Record]
+splitDataSet :: Eq a => [Record a l] -> Int -> a -> [Record a l]
 splitDataSet rs axis value = map
     (\(xs, l) -> (deleteAt axis xs, l)) $ filter (\(xs, _) -> xs !! axis == value)
     rs
 
 -- cf trees.chooseBestFeatureToSplit
 -- TODO: Use vector instead of list for O(1) indexing
-chooseBestFeatureToSplit :: [Record] -> (Double, Int)
+chooseBestFeatureToSplit :: (Ord a, Ord l) => [Record a l] -> (Double, Int)
 chooseBestFeatureToSplit rs =
     let (xs, _) = head rs
         featureCount = length xs
@@ -93,15 +93,9 @@ chooseBestFeatureToSplit rs =
         (0.0, -1)
         [0..featureCount - 1]
 
--- cf trees.majorityCnt
-majorityCount :: [Class] -> (Class, Int)
-majorityCount labels = foldr1
-    (\p0@(_, n0) p1@(_, n1) -> if n1 > n0 then p1 else p0)
-    (M.toList $ itemCounts labels)
-
 -- cf trees.createTree
 -- TODO: Enforce non-emptiness
-mkDecisionTree :: [Record] -> [Label] -> DecisionTree
+mkDecisionTree :: (Ord a, Eq l, Ord l) => [Record a l] -> [n] -> Tree a l n
 mkDecisionTree dataSet labels =
     let classList = map snd dataSet
         firstClass = head classList
@@ -125,12 +119,10 @@ mkDecisionTree dataSet labels =
 
 -- cf trees.classify
 -- TODO: Use vector of keys instead of list for O(1) lookup
-classify :: DecisionTree -> [Label] -> [Feature] -> Class
-classify (Leaf c) _ _ = c
+classify :: (Eq a, Eq n) => Tree a l n -> [n] -> [a] -> l
+classify (Leaf l) _ _ = l
 classify (Node nodeLabel arrows) featLabels testVec =
     let Just featIndex = nodeLabel `L.elemIndex` featLabels
         key = testVec !! featIndex
-        -- TODO: Yikes. We really do need to store the value and not a string!
-        -- TODO: This "show" is so wrong!
         Just (A subtree _) = L.find (\(A _ s) -> s == key) arrows
     in classify subtree featLabels testVec
