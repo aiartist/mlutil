@@ -1,7 +1,10 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module MLUtil.Graphics.Flowchart
-    ( Flowchart
+    ( ArrowLabel (..)
+    , Flowchart (..)
+    , LeafLabel (..)
+    , NodeLabel (..)
     , flowchart
     ) where
 
@@ -11,6 +14,18 @@ import           MLUtil.Tree
 type Flowchart = Diagram
 type FlowchartWithSize = (Flowchart, Size)
 type Size = (Measure, Measure)
+
+-- |A label for an arrow within a tree
+class ArrowLabel a where
+    alLabel :: a -> String
+
+-- |A label for a leaf within a tree
+class LeafLabel l where
+    llLabel :: l -> String
+
+-- |A label for a node within a tree
+class NodeLabel n where
+    nlLabel :: n -> String
 
 data FlowchartLayout = FlowchartLayout
     { boxInnerWidth :: Measure
