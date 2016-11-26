@@ -23,14 +23,17 @@ import qualified Data.Set as S
 import           MLUtil.Graphics
 import           MLUtil.Tree
 
+-- Arrow
 newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
 instance ArrowLabel Feature where
     alLabel = show . unFeature
 
+-- Leaf
 newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
 instance LeafLabel Class where
     llLabel = unClass
 
+-- Node
 newtype Label = L { unLabel :: String } deriving (Eq, Show)
 instance NodeLabel Label where
     nlLabel = unLabel
