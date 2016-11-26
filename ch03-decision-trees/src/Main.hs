@@ -1,5 +1,6 @@
 module Main (main) where
 
+import           Data.Binary
 import           Ch03DecisionTrees.DecisionTree
 import           MLUtil
 import           MLUtil.Graphics
@@ -26,8 +27,7 @@ testClassify :: IO ()
 testClassify = do
     let tree = mkDecisionTree dataSet labels
         r = classify tree labels [1, 0]
-    print tree
-    print r
+    encodeFile "test.bin" tree
 
 main :: IO ()
 main = do
