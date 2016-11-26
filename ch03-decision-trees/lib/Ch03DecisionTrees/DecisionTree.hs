@@ -20,7 +20,7 @@ import qualified Data.Set as S
 import           MLUtil.Graphics
 import           MLUtil.Tree
 
--- In this case the arrow in the tree is a "feature" arrow
+-- In the case of a decision tree, the arrow is a feature
 data Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
 instance ArrowLabel Feature where
     alLabel = show . unFeature
