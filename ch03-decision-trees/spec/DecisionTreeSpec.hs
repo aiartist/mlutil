@@ -16,18 +16,15 @@ import           Test.Hspec
 
 -- Arrow: Eq a, Ord a
 newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
-instance ArrowLabel Feature where
-    alLabel = show . unFeature
+instance ArrowLabel Feature where alLabel = show . unFeature
 
 -- Leaf: Eq l, Ord l
 newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
-instance LeafLabel Class where
-    llLabel = unClass
+instance LeafLabel Class where llLabel = unClass
 
 -- Node: Eq n
 newtype Label = L { unLabel :: String } deriving (Eq, Show)
-instance NodeLabel Label where
-    nlLabel = unLabel
+instance NodeLabel Label where nlLabel = unLabel
 
 dataSet :: [Record Feature Class]
 dataSet =
