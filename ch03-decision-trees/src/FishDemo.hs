@@ -33,7 +33,7 @@ fishLabels = FL <$> ["no surfacing", "flippers"]
 renderFigures :: IO ()
 renderFigures =
     -- Figures 3.2 and 3.6
-    renderFlowchartSVG "flowchart.svg" (flowchart (mkDecisionTree fishDataSet fishLabels))
+    renderFlowchartSVG "fish.svg" (flowchart (mkDecisionTree fishDataSet fishLabels))
 
 testClassify :: IO ()
 testClassify = do

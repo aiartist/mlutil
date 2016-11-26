@@ -5,5 +5,5 @@ import           LensDemo
 
 main :: IO ()
 main = do
-    runFishDemos
+    --runFishDemos
     runLensDemos
