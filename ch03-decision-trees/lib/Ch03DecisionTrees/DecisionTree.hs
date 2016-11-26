@@ -1,10 +1,8 @@
 {-# LANGUAGE LambdaCase #-}
 
 module Ch03DecisionTrees.DecisionTree
-    ( Class (..)
-    , DecisionTree (..)
+    ( DecisionTree (..)
     , Feature (..)
-    , Label (..)
     , Record
     , calculateShannonEntropy
     , chooseBestFeatureToSplit
