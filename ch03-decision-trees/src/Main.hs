@@ -23,13 +23,34 @@ renderFigures = do
     let c = flowchart (mkDecisionTree dataSet labels)
     renderFlowchartSVG "flowchart.svg" c
 
-testClassify :: IO ()
-testClassify = do
+testClassifyAndEncode :: IO ()
+testClassifyAndEncode = do
     let tree = mkDecisionTree dataSet labels
         r = classify tree labels [1, 0]
+    print r
     encodeFile "test.bin" tree
+
+data LensFeature = LF String deriving Show
+instance FeatureClass LensFeature where
+
+data LensClass = LC String deriving Show
+instance ClassClass LensClass where
+
+data LensLabel = LL String
+instance LabelClass LensLabel where
+
+lenses :: IO ()
+lenses = do
+    path <- getDataFileName "lenses.txt"
+    ls <- lines <$> IOS.readFile path
+    let lenses = map (\l -> let xs = splitOneOf ['\t'] l in R2 (map LF (init xs)) (LC $ last xs)) ls
+        lensesLabels = LL <$> ["age", "prescript", "astigmatic", "tearRate"]
+        lensesTree = mkDecisionTree2 lenses lensesLabels
+    print lenses
+    print lensesTree
 
 main :: IO ()
 main = do
     --renderFigures
-    testClassify
+    --testClassifyAndEncode
+    lenses
