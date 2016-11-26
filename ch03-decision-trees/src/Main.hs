@@ -18,7 +18,7 @@ labels = L <$> ["no surfacing", "flippers"]
 
 renderFigures :: IO ()
 renderFigures = do
-    -- Figure 3.2
+    -- Figures 3.2 and 3.6
     let c = flowchart (mkDecisionTree dataSet labels)
     renderFlowchartSVG "flowchart.svg" c
 
