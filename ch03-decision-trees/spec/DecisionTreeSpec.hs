@@ -29,7 +29,7 @@ labels = L <$> ["no surfacing", "flippers"]
 leaf :: String -> DecisionTree
 leaf = Leaf . C
 
-node :: String -> [Arrow Feature] -> DecisionTree
+node :: String -> [Arrow Feature Class] -> DecisionTree
 node = Node . L
 
 spec :: Spec

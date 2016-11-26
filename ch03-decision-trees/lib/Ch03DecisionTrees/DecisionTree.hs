@@ -1,7 +1,8 @@
 {-# LANGUAGE LambdaCase #-}
 
 module Ch03DecisionTrees.DecisionTree
-    ( DecisionTree (..)
+    ( Class (..)
+    , DecisionTree (..)
     , Feature (..)
     , Record
     , calculateShannonEntropy
@@ -20,6 +21,10 @@ import qualified Data.Set as S
 import           MLUtil.Graphics
 import           MLUtil.Tree
 
+newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
+instance LeafLabel Class where
+    llLabel = unClass
+
 -- In the case of a decision tree, the arrow is a feature
 data Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
 instance ArrowLabel Feature where
@@ -27,8 +32,7 @@ instance ArrowLabel Feature where
 
 type Record = ([Feature], Class)
 
---data DecisionTree = Leaf Class | Node Label (M.Map Feature DecisionTree) deriving (Eq, Show)
-type DecisionTree = Tree Feature
+type DecisionTree = Tree Feature Class
 
 deleteAt :: Int -> [a] -> [a]
 deleteAt idx xs =

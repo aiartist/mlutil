@@ -7,11 +7,13 @@ import           Data.Binary
 import           MLUtil
 import           Test.Hspec
 
-leaf :: String -> Tree a
+{-
+leaf :: LeafLabel b => String -> Tree a b
 leaf = Leaf . C
 
-node :: ArrowLabel a => String -> [Arrow a] -> Tree a
+node :: ArrowLabel a => String -> [Arrow a b] -> Tree a b
 node = Node . L
+-}
 
 spec :: Spec
 spec = do
