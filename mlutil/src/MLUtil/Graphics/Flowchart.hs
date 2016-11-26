@@ -67,7 +67,7 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childTreesWithArrowLa
                 case arrowLabel al of
                     Nothing -> (ds, x - w)
                     Just s ->
-                        let d = text s # moveTo (p2 (posOffset pos arrowLabelOffset + toMeasure pos * boxOuterWidth' / 2, arrowLabelOffset - boxOuterHeight' / 2))
+                        let d = text s # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
                         in (d : ds, x - w))
             ([], width / 2)
             (zip [-h ..] childDiagramInfos)
@@ -80,10 +80,6 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childTreesWithArrowLa
             arrows ++
             arrowLabels
             , (width, height))
-    where
-        posOffset pos offset
-            | pos < 0 = -offset
-            | otherwise = offset
 
 boxOuterWidth :: FlowchartLayout -> Measure
 boxOuterWidth FlowchartLayout{..} = boxFrameWidth + boxInnerWidth + boxFrameWidth
@@ -96,7 +92,3 @@ leafBox FlowchartLayout{..} s = frame boxFrameWidth $ text s <> roundedRect boxI
 
 nodeBox :: FlowchartLayout -> String -> Diagram
 nodeBox FlowchartLayout{..} s = frame boxFrameWidth $ text s <> rect boxInnerWidth boxInnerHeight
-
--- TODO: Should be a function of the label width!
-arrowLabelOffset :: Measure
-arrowLabelOffset = 0.75
