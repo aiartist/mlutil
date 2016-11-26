@@ -1,9 +1,12 @@
 module Main (main) where
 
 import           Data.Binary
+import           Data.List.Split
+import           DataFiles
 import           Ch03DecisionTrees.DecisionTree
 import           MLUtil
 import           MLUtil.Graphics
+import qualified System.IO.Strict as IOS
 
 dataSet :: [Record]
 dataSet =
@@ -30,14 +33,24 @@ testClassifyAndEncode = do
     print r
     encodeFile "test.bin" tree
 
+class FeatureClass2 a where
+class ClassClass2 a where
+class LabelClass2 a where
+
 data LensFeature = LF String deriving Show
-instance FeatureClass LensFeature where
+instance FeatureClass2 LensFeature where
 
 data LensClass = LC String deriving Show
-instance ClassClass LensClass where
+instance ClassClass2 LensClass where
 
 data LensLabel = LL String
-instance LabelClass LensLabel where
+instance LabelClass2 LensLabel where
+
+-- TODO: This is roughly what Record should look like eventually
+data Record2 a b = R2 [a] b deriving Show
+
+mkDecisionTree2 :: [Record2 a b] -> [c] -> Int
+mkDecisionTree2 _ _ = 0
 
 lenses :: IO ()
 lenses = do
