@@ -1,0 +1,41 @@
+name:                         ch04-naive-bayes
+version:                      0.1.0.0
+synopsis:                     Machine Learning in Action: naive Bayes
+description:                  Please see README.md
+homepage:                     https://github.com/rcook/mlutil#readme
+license:                      MIT
+license-file:                 LICENSE
+author:                       Richard Cook
+maintainer:                   rcook@rcook.org
+copyright:                    2016 Richard Cook
+category:                     Web
+build-type:                   Simple
+cabal-version:                >=1.10
+
+library
+  hs-source-dirs:             lib
+  default-language:           Haskell2010
+  exposed-modules:            Ch04NaiveBayes.NaiveBayes
+  build-depends:              base
+
+executable ch04-naive-bayes-app
+  hs-source-dirs:             src
+  main-is:                    Main.hs
+  default-language:           Haskell2010
+  other-modules:              DataFiles
+                            , Paths_ch04_naive_bayes
+  build-depends:              base
+                            , ch04-naive-bayes
+
+test-suite spec
+  type:                       exitcode-stdio-1.0
+  hs-source-dirs:             spec
+  default-language:           Haskell2010
+  main-is:                    Spec.hs
+  other-modules:              NaiveBayesSpec
+                            , DataFiles
+                            , Paths_ch04_naive_bayes
+                            , Spec
+  build-depends:              base
+                            , ch04-naive-bayes
+                            , hspec

@@ -19,6 +19,7 @@ The last point includes refactoring much of the code where I have taken lazy app
 * [`mlutil`][mlutil]
 * [Programs from chapter 2 of book: k-nearest neighbours algorithm][ch02knn]
 * [Programs from chapter 3 of book: decision trees][ch03decisiontrees]
+* [Programs from chapter 4 of book: na&iuml;ve Bayes][ch04naivebayes]
 
 ## Supported platforms
 
@@ -57,6 +58,7 @@ The `test` script works in a similar manner. I'll write similar companion script
 [buildscript]: build
 [ch02knn]: ch02-knn/README.md
 [ch03decisiontrees]: ch03-decision-trees/README.md
+[ch04naivebayes]: ch04-naive-bayes/README.md
 [dh]: https://github.com/datahaskell
 [hmatrixpackage]: https://hackage.haskell.org/package/hmatrix
 [licence]: LICENSE
