@@ -19,6 +19,7 @@ module MLUtil
     , module MLUtil.Normalization
     , module MLUtil.Roundable
     , module MLUtil.Sorting
+    , module MLUtil.Tree
     , module MLUtil.Util
     ) where
 
@@ -29,4 +30,5 @@ import           MLUtil.LabelledMatrix
 import           MLUtil.Normalization
 import           MLUtil.Roundable
 import           MLUtil.Sorting
+import           MLUtil.Tree
 import           MLUtil.Util

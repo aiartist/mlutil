@@ -12,12 +12,13 @@ module Ch03DecisionTrees.DecisionTree
     , splitDataSet
     ) where
 
--- TODO: Hide the (!!) operator so we can't index into lists!
+-- TODO: Hide the (!!) operator so we don't index into lists!
 
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import           MLUtil.Graphics
+import           MLUtil.Tree
 
 data Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
 

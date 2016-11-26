@@ -6,7 +6,10 @@ module DecisionTreeSpec
     ) where
 
 import           Ch03DecisionTrees.DecisionTree
+import           Data.Binary
+import qualified Data.ByteString.Lazy.Char8 as C8
 import qualified Data.Map as M
+import           MLUtil
 import           MLUtil.Graphics
 import           MLUtil.Test
 import           Test.Hspec
@@ -92,6 +95,14 @@ spec = do
 
         it "should classify [1, 1] as yes" $
             classify tree labels [1, 1] `shouldBe` C "yes"
+
+    describe "encodeDecisionTree" $ do
+        let tree = mkDecisionTree dataSet labels
+            bs = encode tree
+            tree' = decode bs
+
+        it "single leaf should roundtrip" $
+            tree' `shouldBe` tree
 
 main :: IO ()
 main = hspec spec

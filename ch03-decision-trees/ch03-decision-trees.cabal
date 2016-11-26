@@ -18,6 +18,8 @@ library
   exposed-modules:            Ch03DecisionTrees.DecisionTree
   build-depends:              SVGFonts
                             , base
+                            , binary
+                            , bytestring
                             , containers
                             , diagrams-core
                             , diagrams-lib
@@ -46,6 +48,8 @@ test-suite spec
                             , DecisionTreeSpec
                             , Paths_ch03_decision_trees
   build-depends:              base
+                            , binary
+                            , bytestring
                             , ch03-decision-trees
                             , containers
                             , hspec

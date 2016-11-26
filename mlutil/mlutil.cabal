@@ -37,10 +37,12 @@ library
                             , MLUtil.Sorting
                             , MLUtil.Test
                             , MLUtil.Test.Expectations
+                            , MLUtil.Tree
                             , MLUtil.Util
   build-depends:              Chart
                             , Chart-diagrams
                             , base
+                            , binary
                             , containers
                             , diagrams-lib
                             , diagrams-svg
@@ -64,7 +66,9 @@ test-suite spec
                             , NormalizationSpec
                             , RoundableSpec
                             , SortingSpec
+                            , TreeSpec
   build-depends:              base
+                            , binary
                             , containers
                             , hspec
                             , mlutil
