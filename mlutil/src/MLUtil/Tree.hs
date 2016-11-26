@@ -1,23 +1,25 @@
 module MLUtil.Tree
     ( Arrow (..)
     , ArrowLabel (..)
-    , Label (..)
     , LeafLabel (..)
+    , NodeLabel (..)
     , Tree (..)
     ) where
 
+-- |A label for an arrow within a tree
 class ArrowLabel a where
     alLabel :: a -> String
 
+-- |A label for a leaf within a tree
 class LeafLabel a where
     llLabel :: a -> String
 
--- TODO: Rename this to make it less specific to decision trees
-newtype Label = L { unLabel :: String } deriving (Eq, Show)
+-- |A label for a node within a tree
+class NodeLabel a where
+    nlLabel :: a -> String
 
--- An arrow is a child tree plus a label
-data Arrow a b = A (Tree a b) a deriving (Eq, Show)
+-- |An arrow is a child tree plus a label
+data Arrow a b c = A (Tree a b c) a deriving (Eq, Show)
 
--- a is the arrow type
--- b is the leaf type
-data Tree a b = Leaf b | Node Label [Arrow a b] deriving (Eq, Show)
+-- |A tree consisting of arrow labels, leaf labels and node labels
+data Tree a b c = Leaf b | Node c [Arrow a b c] deriving (Eq, Show)

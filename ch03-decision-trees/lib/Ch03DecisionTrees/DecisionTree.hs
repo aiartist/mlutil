@@ -3,8 +3,10 @@
 module Ch03DecisionTrees.DecisionTree
     ( Class (..)
     , DecisionTree (..)
+    , DecisionTreeArrow (..)
     , Feature (..)
-    , Record
+    , Label (..)
+    , Record (..)
     , calculateShannonEntropy
     , chooseBestFeatureToSplit
     , classify
@@ -21,18 +23,23 @@ import qualified Data.Set as S
 import           MLUtil.Graphics
 import           MLUtil.Tree
 
+newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
+instance ArrowLabel Feature where
+    alLabel = show . unFeature
+
 newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
 instance LeafLabel Class where
     llLabel = unClass
 
--- In the case of a decision tree, the arrow is a feature
-data Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
-instance ArrowLabel Feature where
-    alLabel = show . unFeature
+newtype Label = L { unLabel :: String } deriving (Eq, Show)
+instance NodeLabel Label where
+    nlLabel = unLabel
 
 type Record = ([Feature], Class)
 
-type DecisionTree = Tree Feature Class
+type DecisionTreeArrow = Arrow Feature Class Label
+
+type DecisionTree = Tree Feature Class Label
 
 deleteAt :: Int -> [a] -> [a]
 deleteAt idx xs =
