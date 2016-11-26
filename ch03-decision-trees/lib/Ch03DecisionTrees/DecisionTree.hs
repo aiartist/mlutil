@@ -6,6 +6,7 @@ module Ch03DecisionTrees.DecisionTree
     , Record
     , calculateShannonEntropy
     , chooseBestFeatureToSplit
+    , classify
     , majorityCount
     , mkDecisionTree
     , splitDataSet
@@ -13,6 +14,7 @@ module Ch03DecisionTrees.DecisionTree
 
 -- TODO: Hide the (!!) operator so we can't index into lists!
 
+import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 import           MLUtil.Graphics
@@ -102,3 +104,15 @@ mkDecisionTree dataSet labels =
                         []
                         uniqueVals
                 in Node bestFeatLabel childArrows
+
+-- cf trees.classify
+-- TODO: Use vector of keys instead of list for O(1) lookup
+classify :: DecisionTree -> [Label] -> [Int] -> Class
+classify (Leaf c) _ _ = c
+classify (Node nodeLabel arrows) featLabels testVec =
+    let Just featIndex = nodeLabel `L.elemIndex` featLabels
+        key = testVec !! featIndex
+        -- TODO: Yikes. We really do need to store the value and not a string!
+        -- TODO: This "show" is so wrong!
+        Just (A subtree _) = L.find (\(A _ s) -> s == show key) arrows
+    in classify subtree featLabels testVec

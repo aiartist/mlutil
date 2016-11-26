@@ -70,5 +70,28 @@ spec = do
                         ]
             in mkDecisionTree dataSet labels `shouldBe` expectedDT
 
+    describe "classify" $ do
+        let tree =
+                node "no surfacing"
+                    [ A (leaf "no") "0"
+                    , A (node "flippers"
+                        [ A (leaf "no") "0"
+                        , A (leaf "yes") "1"
+                        ]) "1"
+                    ]
+            labels = L <$> ["no surfacing", "flippers"]
+
+        it "should classify [0, 0] as no" $
+            classify tree labels [0, 0] `shouldBe` C "no"
+
+        it "should classify [0, 1] as no" $
+            classify tree labels [0, 1] `shouldBe` C "no"
+
+        it "should classify [1, 0] as no" $
+            classify tree labels [1, 0] `shouldBe` C "no"
+
+        it "should classify [1, 1] as yes" $
+            classify tree labels [1, 1] `shouldBe` C "yes"
+
 main :: IO ()
 main = hspec spec

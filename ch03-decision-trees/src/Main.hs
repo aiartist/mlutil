@@ -22,5 +22,14 @@ renderFigures = do
     let c = flowchart (mkDecisionTree dataSet labels)
     renderFlowchartSVG "flowchart.svg" c
 
+testClassify :: IO ()
+testClassify = do
+    let tree = mkDecisionTree dataSet labels
+        r = classify tree labels [1, 0]
+    print tree
+    print r
+
 main :: IO ()
-main = renderFigures
+main = do
+    --renderFigures
+    testClassify
