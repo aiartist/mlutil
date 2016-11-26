@@ -14,25 +14,22 @@ import           MLUtil.Graphics
 import           MLUtil.Test
 import           Test.Hspec
 
--- Arrow: Eq a, Ord a
-newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
-instance ArrowLabel Feature where alLabel = show . unFeature
+newtype Feature = F Int deriving (Eq, Ord, Show)
 
--- Leaf: Eq l, Ord l
-newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
-instance LeafLabel Class where llLabel = unClass
+newtype Class = C String deriving (Eq, Ord, Show)
 
--- Node: Eq n
-newtype Label = L { unLabel :: String } deriving (Eq, Show)
-instance NodeLabel Label where nlLabel = unLabel
+newtype Label = L String deriving (Eq, Show)
+
+mkRecord :: ([Int], String) -> Record Feature Class
+mkRecord (fs, c) = (F <$> fs, C c)
 
 dataSet :: [Record Feature Class]
-dataSet =
-    [ (F <$> [1, 1], C "yes")
-    , (F <$> [1, 1], C "yes")
-    , (F <$> [1, 0], C "no")
-    , (F <$> [0, 1], C "no")
-    , (F <$> [0, 1], C "no")
+dataSet = mkRecord <$>
+    [ ([1, 1], "yes")
+    , ([1, 1], "yes")
+    , ([1, 0], "no")
+    , ([0, 1], "no")
+    , ([0, 1], "no")
     ]
 
 labels :: [Label]
@@ -41,7 +38,7 @@ labels = L <$> ["no surfacing", "flippers"]
 leaf :: String -> Tree Feature Class Label
 leaf = Leaf . C
 
-node :: String -> [Arrow Feature Class Label] -> Tree Feature Class Label
+node :: String -> [Branch Feature Class Label] -> Tree Feature Class Label
 node = Node . L
 
 spec :: Spec
