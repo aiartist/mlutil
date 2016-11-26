@@ -28,16 +28,22 @@ class NodeLabel n where
     nlLabel :: n -> String
 
 data FlowchartLayout = FlowchartLayout
-    { boxInnerWidth :: Measure
-    , boxInnerHeight :: Measure
-    , boxFrameWidth :: Measure
-    } deriving Show
+    { flBoxInnerWidth :: Measure
+    , flBoxInnerHeight :: Measure
+    , flBoxFrameWidth :: Measure
+    , flBranchFontSize :: FontMeasure
+    , flLeafFontSize :: FontMeasure
+    , flNodeFontSize :: FontMeasure
+    }
 
 defaultFlowchartLayout :: FlowchartLayout
 defaultFlowchartLayout = FlowchartLayout
-    { boxInnerWidth = 10
-    , boxInnerHeight = 5
-    , boxFrameWidth = 2
+    { flBoxInnerWidth = 10
+    , flBoxInnerHeight = 5
+    , flBoxFrameWidth = 2
+    , flBranchFontSize = 6
+    , flLeafFontSize = 7
+    , flNodeFontSize = 7
     }
 
 flowchart :: (BranchLabel b, LeafLabel l, NodeLabel n) => Tree b l n -> Flowchart
@@ -50,7 +56,7 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
         boxOuterWidth' = boxOuterWidth layout
         boxOuterHeight' = boxOuterHeight layout
         h = length childArrows `quot` 2
-        arrowStart = p2 (0, -(boxInnerHeight / 2))
+        arrowStart = p2 (0, -(flBoxInnerHeight / 2))
         childDiagramInfos = map (\(A t al) -> let (d, (w, h)) = flowchartHelper layout t in (al, d, w, h)) childArrows
 
         -- TODO: Consider collapsing these into a single fold
@@ -61,12 +67,12 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
             ([], width / 2)
             childDiagramInfos
         (branches, _) = foldr
-            (\(_, d, w, _) (ds, x) -> let d = arrowBetween' (with & headLength .~ verySmall) arrowStart (p2 (x - w / 2, boxInnerHeight / 2 - boxOuterHeight')) in (d : ds, x - w))
+            (\(_, d, w, _) (ds, x) -> let d = arrowBetween' (with & headLength .~ verySmall) arrowStart (p2 (x - w / 2, flBoxInnerHeight / 2 - boxOuterHeight')) in (d : ds, x - w))
             ([], width / 2)
             childDiagramInfos
         (branchLabels, _) = foldr
             (\(pos, (bl, _, w, _)) (ds, x) ->
-                let d = text (blLabel bl) # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
+                let d = text (blLabel bl) # fontSize flBranchFontSize # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
                 in (d : ds, x - w))
             ([], width / 2)
             (zip [-h ..] childDiagramInfos)
@@ -81,13 +87,17 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
             , (width, height))
 
 boxOuterWidth :: FlowchartLayout -> Measure
-boxOuterWidth FlowchartLayout{..} = boxFrameWidth + boxInnerWidth + boxFrameWidth
+boxOuterWidth FlowchartLayout{..} = flBoxFrameWidth + flBoxInnerWidth + flBoxFrameWidth
 
 boxOuterHeight :: FlowchartLayout -> Measure
-boxOuterHeight FlowchartLayout{..} = boxFrameWidth + boxInnerHeight + boxFrameWidth
+boxOuterHeight FlowchartLayout{..} = flBoxFrameWidth + flBoxInnerHeight + flBoxFrameWidth
 
 leafBox :: FlowchartLayout -> String -> Diagram
-leafBox FlowchartLayout{..} s = frame boxFrameWidth $ text s <> roundedRect boxInnerWidth boxInnerHeight 3
+leafBox FlowchartLayout{..} s = frame flBoxFrameWidth $
+    text s # fontSize flLeafFontSize <>
+    roundedRect flBoxInnerWidth flBoxInnerHeight 3
 
 nodeBox :: FlowchartLayout -> String -> Diagram
-nodeBox FlowchartLayout{..} s = frame boxFrameWidth $ text s <> rect boxInnerWidth boxInnerHeight
+nodeBox FlowchartLayout{..} s = frame flBoxFrameWidth $
+    text s # fontSize flNodeFontSize <>
+    rect flBoxInnerWidth flBoxInnerHeight
