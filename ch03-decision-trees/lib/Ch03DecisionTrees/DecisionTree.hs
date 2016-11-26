@@ -1,10 +1,7 @@
 {-# LANGUAGE LambdaCase #-}
 
 module Ch03DecisionTrees.DecisionTree
-    ( Class (..)
-    , Feature (..)
-    , Label (..)
-    , Record (..)
+    ( Record (..)
     , calculateShannonEntropy
     , chooseBestFeatureToSplit
     , classify
@@ -20,21 +17,6 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 import           MLUtil.Graphics
 import           MLUtil.Tree
-
--- Arrow: Eq a, Ord a
-newtype Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
-instance ArrowLabel Feature where
-    alLabel = show . unFeature
-
--- Leaf: Eq l, Ord l
-newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
-instance LeafLabel Class where
-    llLabel = unClass
-
--- Node: Eq n
-newtype Label = L { unLabel :: String } deriving (Eq, Show)
-instance NodeLabel Label where
-    nlLabel = unLabel
 
 type Record a l = ([a], l)
 
