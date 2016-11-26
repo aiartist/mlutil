@@ -29,7 +29,7 @@ renderFigures = do
 testClassifyAndEncode :: IO ()
 testClassifyAndEncode = do
     let tree = mkDecisionTree dataSet labels
-        r = classify tree labels [1, 0]
+        r = classify tree labels (F <$> [1, 0])
     print r
     --encodeFile "test.bin" tree
 

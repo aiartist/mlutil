@@ -10,7 +10,7 @@ import           Test.Hspec
 leaf :: String -> Tree a
 leaf = Leaf . C
 
-node :: String -> [Arrow a] -> Tree a
+node :: ArrowLabel a => String -> [Arrow a] -> Tree a
 node = Node . L
 
 spec :: Spec

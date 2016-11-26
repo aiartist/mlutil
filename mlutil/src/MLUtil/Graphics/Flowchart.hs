@@ -25,10 +25,10 @@ defaultFlowchartLayout = FlowchartLayout
     , boxFrameWidth = 2
     }
 
-flowchart :: Tree a -> Flowchart
+flowchart :: ArrowLabel a => Tree a -> Flowchart
 flowchart = fst . (flowchartHelper defaultFlowchartLayout)
 
-flowchartHelper :: FlowchartLayout -> Tree a -> FlowchartWithSize
+flowchartHelper :: ArrowLabel a => FlowchartLayout -> Tree a -> FlowchartWithSize
 flowchartHelper layout (Leaf s) = (leafBox layout (unClass s), (boxOuterWidth layout, boxOuterHeight layout))
 flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
     let
@@ -51,7 +51,7 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
             childDiagramInfos
         (arrowLabels, _) = foldr
             (\(pos, (al, _, w, _)) (ds, x) ->
-                let d = text al # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
+                let d = text (alLabel al) # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
                 in (d : ds, x - w))
             ([], width / 2)
             (zip [-h ..] childDiagramInfos)

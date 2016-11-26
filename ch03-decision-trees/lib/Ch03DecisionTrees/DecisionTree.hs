@@ -20,7 +20,10 @@ import qualified Data.Set as S
 import           MLUtil.Graphics
 import           MLUtil.Tree
 
+-- In this case the arrow in the tree is a "feature" arrow
 data Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
+instance ArrowLabel Feature where
+    alLabel = show . unFeature
 
 type Record = ([Feature], Class)
 
@@ -101,19 +104,19 @@ mkDecisionTree dataSet labels =
                     childArrows = foldr (\value cts ->
                         let sp = splitDataSet dataSet bestFeat value
                             subtree = mkDecisionTree sp labels'
-                        in (A subtree ((show . unFeature) value)) : cts)
+                        in (A subtree value) : cts)
                         []
                         uniqueVals
                 in Node bestFeatLabel childArrows
 
 -- cf trees.classify
 -- TODO: Use vector of keys instead of list for O(1) lookup
-classify :: DecisionTree -> [Label] -> [Int] -> Class
+classify :: DecisionTree -> [Label] -> [Feature] -> Class
 classify (Leaf c) _ _ = c
 classify (Node nodeLabel arrows) featLabels testVec =
     let Just featIndex = nodeLabel `L.elemIndex` featLabels
         key = testVec !! featIndex
         -- TODO: Yikes. We really do need to store the value and not a string!
         -- TODO: This "show" is so wrong!
-        Just (A subtree _) = L.find (\(A _ s) -> s == show key) arrows
+        Just (A subtree _) = L.find (\(A _ s) -> s == key) arrows
     in classify subtree featLabels testVec
