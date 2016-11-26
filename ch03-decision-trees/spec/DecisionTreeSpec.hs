@@ -23,6 +23,12 @@ dataSet =
 labels :: [Label]
 labels = L <$> ["no surfacing", "flippers"]
 
+leaf :: String -> Tree a
+leaf = Leaf . C
+
+node :: String -> [Arrow a] -> Tree a
+node = Node . L
+
 spec :: Spec
 spec = do
     describe "calculateShannonEntropy" $ do
@@ -55,11 +61,13 @@ spec = do
     describe "mkDecisionTree" $ do
         it "should create a decision tree" $
             let expectedDT =
-                    Node
-                        (L "no surfacing")
-                        [A (Leaf $ C "no") "0", A (Node
-                            (L "flippers")
-                            [A (Leaf $ C "no") "0", A (Leaf $ C "yes") "1"]) "1"]
+                    node "no surfacing"
+                        [ A (leaf "no") "0"
+                        , A (node "flippers"
+                            [ A (leaf "no") "0"
+                            , A (leaf "yes") "1"
+                            ]) "1"
+                        ]
             in mkDecisionTree dataSet labels `shouldBe` expectedDT
 
 main :: IO ()
