@@ -20,8 +20,6 @@ import qualified Data.Set as S
 import           MLUtil.Graphics
 
 data Feature = F { unFeature :: Int } deriving (Eq, Ord, Show)
-instance ArrowLabel Feature where
-    arrowLabel (F x) = Just (show x)
 
 type Record = ([Feature], Class)
 
@@ -99,10 +97,10 @@ mkDecisionTree dataSet labels =
                     labels' = deleteAt bestFeat labels
                     featValues = [features !! bestFeat | (features, _) <- dataSet]
                     uniqueVals = S.fromList featValues
-                    childTrees = foldr (\value cts ->
+                    childArrows = foldr (\value cts ->
                         let sp = splitDataSet dataSet bestFeat value
                             subtree = mkDecisionTree sp labels'
-                        in (subtree, value) : cts)
+                        in (A subtree ((show . unFeature) value)) : cts)
                         []
                         uniqueVals
-                in Node bestFeatLabel childTrees
+                in Node bestFeatLabel childArrows

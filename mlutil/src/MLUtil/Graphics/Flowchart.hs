@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module MLUtil.Graphics.Flowchart
-    ( ArrowLabel (..)
+    ( Arrow (..)
     , Class (..)
     , Label (..)
     , Tree (..)
@@ -13,17 +13,16 @@ import           MLUtil.Graphics.Imports
 type DiagramWithSize = (Diagram, Size)
 type Size = (Measure, Measure)
 
-class ArrowLabel a where
-    arrowLabel :: a -> Maybe String
-
 -- TODO: Rename this to make it less specific to decision trees
 newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
 
 -- TODO: Rename this to make it less specific to decision trees
 newtype Label = L { unLabel :: String } deriving (Eq, Show)
 
+data Arrow a = A (Tree a) String deriving Show
+
 -- TODO: Not happy with the tuple since we don't use a for anything except ArrowLabel
-data Tree a = Leaf Class | Node Label [(Tree a, a)] deriving Show
+data Tree a = Leaf Class | Node Label [Arrow a] deriving Show
 
 data FlowchartLayout = FlowchartLayout
     { boxInnerWidth :: Measure
@@ -38,18 +37,18 @@ defaultFlowchartLayout = FlowchartLayout
     , boxFrameWidth = 2
     }
 
-flowchart :: ArrowLabel a => Tree a -> Diagram
+flowchart :: Tree a -> Diagram
 flowchart = fst . (flowchartHelper defaultFlowchartLayout)
 
-flowchartHelper :: ArrowLabel a => FlowchartLayout -> Tree a -> DiagramWithSize
+flowchartHelper :: FlowchartLayout -> Tree a -> DiagramWithSize
 flowchartHelper layout (Leaf s) = (leafBox layout (unClass s), (boxOuterWidth layout, boxOuterHeight layout))
-flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childTreesWithArrowLabels) =
+flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
     let
         boxOuterWidth' = boxOuterWidth layout
         boxOuterHeight' = boxOuterHeight layout
-        h = length childTreesWithArrowLabels `quot` 2
+        h = length childArrows `quot` 2
         arrowStart = p2 (0, -(boxInnerHeight / 2))
-        childDiagramInfos = map (\(t, al) -> let (d, (w, h)) = flowchartHelper layout t in (al, d, w, h)) childTreesWithArrowLabels
+        childDiagramInfos = map (\(A t al) -> let (d, (w, h)) = flowchartHelper layout t in (al, d, w, h)) childArrows
 
         -- TODO: Consider collapsing these into a single fold
         width = foldr (\(_, _, w, _) acc -> acc + w) 0 childDiagramInfos
@@ -64,11 +63,8 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childTreesWithArrowLa
             childDiagramInfos
         (arrowLabels, _) = foldr
             (\(pos, (al, _, w, _)) (ds, x) ->
-                case arrowLabel al of
-                    Nothing -> (ds, x - w)
-                    Just s ->
-                        let d = text s # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
-                        in (d : ds, x - w))
+                let d = text al # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
+                in (d : ds, x - w))
             ([], width / 2)
             (zip [-h ..] childDiagramInfos)
 
