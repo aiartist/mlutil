@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module MLUtil.LabelledMatrixPlot
+module MLUtil.Graphics.LabelledMatrixPlot
     ( colouredSeriesPlots
     , simplePlot
     ) where
@@ -8,10 +8,10 @@ module MLUtil.LabelledMatrixPlot
 import qualified Data.Map as M
 import           Data.Vector.Storable as VS hiding (foldr, map)
 import qualified Data.Vector.Unboxed as VU
-import           Graphics.Rendering.Chart.Easy
+import           Graphics.Rendering.Chart.Easy (points)
+import           MLUtil.Graphics.ScatterPlot
 import           MLUtil.Imports
 import           MLUtil.LabelledMatrix
-import           MLUtil.RRScatterPlot
 
 type Coordinate = (R, R)
 type CoordinateList = [Coordinate]
@@ -34,12 +34,12 @@ colouredSeriesPlotSpecs LabelledMatrix{..} xColumnIndex yColumnIndex =
             Just labelText = M.lookup labelId lmLabelMap
         in (labelText, subseries)
 
-colouredSeriesPlots :: LabelledMatrix -> Int -> Int -> [RRScatterPlot]
+colouredSeriesPlots :: LabelledMatrix -> Int -> Int -> [ScatterPlot]
 colouredSeriesPlots m xColumnIndex yColumnIndex = map
     (uncurry points)
     (colouredSeriesPlotSpecs m xColumnIndex yColumnIndex)
 
-simplePlot :: LabelledMatrix -> Int -> Int -> RRScatterPlot
+simplePlot :: LabelledMatrix -> Int -> Int -> ScatterPlot
 simplePlot LabelledMatrix{..} xColumnIndex yColumnIndex =
     let columns = toColumns lmValues
         xColumn = columns !! xColumnIndex

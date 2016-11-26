@@ -3,6 +3,7 @@
 module MLUtil.Graphics.Flowchart
     ( Arrow (..)
     , Class (..)
+    , Flowchart
     , Label (..)
     , Tree (..)
     , flowchart
@@ -10,7 +11,8 @@ module MLUtil.Graphics.Flowchart
 
 import           MLUtil.Graphics.Imports
 
-type DiagramWithSize = (Diagram, Size)
+type Flowchart = Diagram
+type FlowchartWithSize = (Flowchart, Size)
 type Size = (Measure, Measure)
 
 -- TODO: Rename this to make it less specific to decision trees
@@ -36,10 +38,10 @@ defaultFlowchartLayout = FlowchartLayout
     , boxFrameWidth = 2
     }
 
-flowchart :: Tree a -> Diagram
+flowchart :: Tree a -> Flowchart
 flowchart = fst . (flowchartHelper defaultFlowchartLayout)
 
-flowchartHelper :: FlowchartLayout -> Tree a -> DiagramWithSize
+flowchartHelper :: FlowchartLayout -> Tree a -> FlowchartWithSize
 flowchartHelper layout (Leaf s) = (leafBox layout (unClass s), (boxOuterWidth layout, boxOuterHeight layout))
 flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
     let

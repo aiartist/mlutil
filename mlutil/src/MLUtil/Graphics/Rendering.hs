@@ -1,6 +1,6 @@
 {-# LANGUAGE RecordWildCards #-}
 
-module MLUtil.Charting
+module MLUtil.Graphics.Rendering
     ( ChartLabels (..)
     , defaultChartLabels
     , renderChartSVG
@@ -8,11 +8,11 @@ module MLUtil.Charting
     ) where
 
 import           Diagrams.Backend.SVG
-import           Diagrams.Prelude
 import           Graphics.Rendering.Chart.Backend.Diagrams
 import           Graphics.Rendering.Chart.Easy
-import           MLUtil.Imports
-import           MLUtil.RRScatterPlot
+import           MLUtil.Graphics.Flowchart
+import           MLUtil.Graphics.Imports
+import           MLUtil.Graphics.ScatterPlot
 
 data ChartLabels = ChartLabels
     { clTitle :: Maybe String
@@ -20,12 +20,14 @@ data ChartLabels = ChartLabels
     , clYAxisLabel :: Maybe String
     } deriving Show
 
-type Flowchart = Diagram B
-
 defaultChartLabels :: ChartLabels
-defaultChartLabels = ChartLabels Nothing Nothing Nothing
+defaultChartLabels = ChartLabels
+    { clTitle = Nothing
+    , clXAxisLabel = Nothing
+    , clYAxisLabel = Nothing
+    }
 
-renderChartSVG :: FilePath -> ChartLabels ->[RRScatterPlot] -> IO ()
+renderChartSVG :: FilePath -> ChartLabels ->[ScatterPlot] -> IO ()
 renderChartSVG path ChartLabels{..} ps = toFile def path $ do
     let setMaybe p (Just x) = p .= x
         setMaybe p Nothing = return ()

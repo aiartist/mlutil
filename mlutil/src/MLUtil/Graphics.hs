@@ -14,7 +14,13 @@ Lorem ipsum etc. etc. etc.
 module MLUtil.Graphics
     ( module MLUtil.Graphics.Flowchart
     , module MLUtil.Graphics.Imports
+    , module MLUtil.Graphics.LabelledMatrixPlot
+    , module MLUtil.Graphics.Rendering
+    , module MLUtil.Graphics.ScatterPlot
     ) where
 
 import           MLUtil.Graphics.Flowchart
 import           MLUtil.Graphics.Imports
+import           MLUtil.Graphics.LabelledMatrixPlot
+import           MLUtil.Graphics.Rendering
+import           MLUtil.Graphics.ScatterPlot

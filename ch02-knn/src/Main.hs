@@ -14,6 +14,7 @@ import qualified Data.Vector.Unboxed as VU
 import qualified Data.Vector.Storable as VS
 import           DataFiles
 import           MLUtil
+import           MLUtil.Graphics
 import           System.Directory
 import           System.Exit
 import           System.FilePath
