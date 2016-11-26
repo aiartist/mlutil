@@ -19,10 +19,10 @@ testRenderDecisionTree :: IO ()
 testRenderDecisionTree = do
     path <- getDataFileName "lenses.txt"
     ls <- lines <$> IOS.readFile path
-    let lenses = map (\l -> let xs = splitOneOf ['\t'] l in (map LF (init xs), (LC $ last xs))) ls
-        lensesLabels = LL <$> ["age", "prescript", "astigmatic", "tearRate"]
-        lensesTree = mkDecisionTree lenses lensesLabels
-    renderFlowchartSVG "lens.svg" (flowchart lensesTree)
+    let dataSet = map (\l -> let xs = splitOneOf ['\t'] l in (map LF (init xs), (LC $ last xs))) ls
+        labels = LL <$> ["age", "prescript", "astigmatic", "tearRate"]
+        tree = mkDecisionTree dataSet labels
+    renderFlowchartSVG "lens.svg" (flowchart tree)
 
 runLensDemos :: IO ()
 runLensDemos = testRenderDecisionTree
