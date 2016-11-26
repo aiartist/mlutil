@@ -8,49 +8,53 @@ import           MLUtil
 import           MLUtil.Graphics
 import qualified System.IO.Strict as IOS
 
--- Arrow: Eq a, Ord a
-newtype Feature = F { unFeature :: Int } deriving (Eq, Ord)
-instance ArrowLabel Feature where alLabel = show . unFeature
+newtype FishFeature = FF Int deriving (Eq, Ord)
+instance BranchLabel FishFeature where blLabel (FF x) = show x
 
--- Leaf: Eq l, Ord l
-newtype Class = C { unClass :: String } deriving (Eq, Ord, Show)
-instance LeafLabel Class where llLabel = unClass
+newtype FishClass = FC String deriving (Eq, Ord, Show)
+instance LeafLabel FishClass where llLabel (FC x) = x
 
--- Node: Eq n
-newtype Label = L { unLabel :: String } deriving Eq
-instance NodeLabel Label where nlLabel = unLabel
+newtype FishLabel = FL String deriving Eq
+instance NodeLabel FishLabel where nlLabel (FL x) = x
 
-dataSet :: [Record Feature Class]
-dataSet =
-    [ (F <$> [1, 1], C "yes")
-    , (F <$> [1, 1], C "yes")
-    , (F <$> [1, 0], C "no")
-    , (F <$> [0, 1], C "no")
-    , (F <$> [0, 1], C "no")
+newtype LensFeature = LF String deriving (Eq, Ord, Show)
+
+newtype LensClass = LC String deriving (Eq, Ord, Show)
+
+newtype LensLabel = LL String deriving Show
+
+type FishRecord = Record FishFeature FishClass
+
+mkFishRecord :: ([Int], String) -> FishRecord
+mkFishRecord (fs, c) = (FF <$> fs, FC c)
+
+fishDataSet :: [FishRecord]
+fishDataSet = mkFishRecord <$>
+    [ ([1, 1], "yes")
+    , ([1, 1], "yes")
+    , ([1, 0], "no")
+    , ([0, 1], "no")
+    , ([0, 1], "no")
     ]
 
-labels :: [Label]
-labels = L <$> ["no surfacing", "flippers"]
+fishLabels :: [FishLabel]
+fishLabels = FL <$> ["no surfacing", "flippers"]
 
 renderFigures :: IO ()
 renderFigures = do
     -- Figures 3.2 and 3.6
-    let c = flowchart (mkDecisionTree dataSet labels)
+    let c = flowchart (mkDecisionTree fishDataSet fishLabels)
     renderFlowchartSVG "flowchart.svg" c
 
 testClassifyAndEncode :: IO ()
 testClassifyAndEncode = do
-    let tree = mkDecisionTree dataSet labels
-        r = classify tree labels (F <$> [1, 0])
+    let tree = mkDecisionTree fishDataSet fishLabels
+        r = classify tree fishLabels (FF <$> [1, 0])
     print r
     --encodeFile "test.bin" tree
 
-newtype LensFeature = LF String deriving (Eq, Ord, Show)
-newtype LensClass = LC String deriving (Eq, Ord, Show)
-newtype LensLabel = LL String deriving Show
-
-lenses :: IO ()
-lenses = do
+testLenses :: IO ()
+testLenses = do
     path <- getDataFileName "lenses.txt"
     ls <- lines <$> IOS.readFile path
     let lenses = map (\l -> let xs = splitOneOf ['\t'] l in (map LF (init xs), (LC $ last xs))) ls
@@ -63,4 +67,4 @@ main :: IO ()
 main = do
     --renderFigures
     --testClassifyAndEncode
-    lenses
+    testLenses

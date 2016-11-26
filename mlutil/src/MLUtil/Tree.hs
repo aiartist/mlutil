@@ -1,10 +1,10 @@
 module MLUtil.Tree
-    ( Arrow (..)
+    ( Branch (..)
     , Tree (..)
     ) where
 
--- |An arrow is a child tree plus a label
-data Arrow a l n = A (Tree a l n) a deriving (Eq, Show)
+-- |A branch is a child tree with a label
+data Branch b l n = A (Tree b l n) b deriving (Eq, Show)
 
 -- |A tree consisting of arrow labels, leaf labels and node labels
-data Tree a l n = Leaf l | Node n [Arrow a l n] deriving (Eq, Show)
+data Tree b l n = Leaf l | Node n [Branch b l n] deriving (Eq, Show)

@@ -1,7 +1,7 @@
 {-# LANGUAGE RecordWildCards #-}
 
 module MLUtil.Graphics.Flowchart
-    ( ArrowLabel (..)
+    ( BranchLabel (..)
     , Flowchart (..)
     , LeafLabel (..)
     , NodeLabel (..)
@@ -15,9 +15,9 @@ type Flowchart = Diagram
 type FlowchartWithSize = (Flowchart, Size)
 type Size = (Measure, Measure)
 
--- |A label for an arrow within a tree
-class ArrowLabel a where
-    alLabel :: a -> String
+-- |A label for a branch  within a tree
+class BranchLabel b where
+    blLabel :: b -> String
 
 -- |A label for a leaf within a tree
 class LeafLabel l where
@@ -40,10 +40,10 @@ defaultFlowchartLayout = FlowchartLayout
     , boxFrameWidth = 2
     }
 
-flowchart :: (ArrowLabel a, LeafLabel b, NodeLabel c) => Tree a b c -> Flowchart
+flowchart :: (BranchLabel b, LeafLabel l, NodeLabel n) => Tree b l n -> Flowchart
 flowchart = fst . (flowchartHelper defaultFlowchartLayout)
 
-flowchartHelper :: (ArrowLabel a, LeafLabel b, NodeLabel c) => FlowchartLayout -> Tree a b c -> FlowchartWithSize
+flowchartHelper :: (BranchLabel b, LeafLabel l, NodeLabel n) => FlowchartLayout -> Tree b l n -> FlowchartWithSize
 flowchartHelper layout (Leaf s) = (leafBox layout (llLabel s), (boxOuterWidth layout, boxOuterHeight layout))
 flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
     let
@@ -60,13 +60,13 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
             (\(_, d, w, _) (ds, x) -> let d' = d # moveTo (p2 (x - w / 2, -boxOuterHeight')) in (d' : ds, x - w))
             ([], width / 2)
             childDiagramInfos
-        (arrows, _) = foldr
+        (branches, _) = foldr
             (\(_, d, w, _) (ds, x) -> let d = arrowBetween' (with & headLength .~ verySmall) arrowStart (p2 (x - w / 2, boxInnerHeight / 2 - boxOuterHeight')) in (d : ds, x - w))
             ([], width / 2)
             childDiagramInfos
-        (arrowLabels, _) = foldr
-            (\(pos, (al, _, w, _)) (ds, x) ->
-                let d = text (alLabel al) # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
+        (branchLabels, _) = foldr
+            (\(pos, (bl, _, w, _)) (ds, x) ->
+                let d = text (blLabel bl) # moveTo (p2 (x - w / 2, -(boxOuterHeight' / 2)))
                 in (d : ds, x - w))
             ([], width / 2)
             (zip [-h ..] childDiagramInfos)
@@ -76,8 +76,8 @@ flowchartHelper layout@FlowchartLayout{..} (Node nodeLabel childArrows) =
         (mconcat $
             nodeBox layout (nlLabel nodeLabel) # moveTo (p2 (0, 0)) :
             childDiagrams ++
-            arrows ++
-            arrowLabels
+            branches ++
+            branchLabels
             , (width, height))
 
 boxOuterWidth :: FlowchartLayout -> Measure
