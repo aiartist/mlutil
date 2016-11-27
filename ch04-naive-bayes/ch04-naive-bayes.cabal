@@ -42,4 +42,6 @@ test-suite spec
                             , Spec
   build-depends:              base
                             , ch04-naive-bayes
+                            , containers
                             , hspec
+                            , vector

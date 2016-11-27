@@ -10,7 +10,7 @@ module Ch04NaiveBayes.NaiveBayes
 import qualified Data.Vector as V
 import           MLUtil.Primitives
 
-data Classification = Class0 | Class1 deriving Show
+data Classification = Class0 | Class1 deriving (Eq, Show)
 
 data NaiveBayesModel = NaiveBayesModel
     { nbmP0Vector :: V.Vector Double
