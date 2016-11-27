@@ -26,5 +26,11 @@ spec = do
         it "should split on symbols" $
             tokens "one=two" `shouldBe` ["one", "two"]
 
+        {-
+        it "should transliterate Unicode" $ do
+            tokens "you’re" `shouldBe` ["you", "re"]
+            tokens "you\u2019re" `shouldBe` ["you", "re"]
+        -}
+
 main :: IO ()
 main = hspec spec
