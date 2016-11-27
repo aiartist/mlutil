@@ -4,6 +4,7 @@ module NaiveBayesSpec
     ) where
 
 import           Ch04NaiveBayes.NaiveBayes
+import           Ch04NaiveBayes.Vocabulary
 import qualified Data.Set as S
 import           Data.Vector ((//))
 import qualified Data.Vector as V
@@ -21,18 +22,10 @@ dataSet =
     , (["quit", "buying", "worthless", "dog", "food", "stupid"], Class1)
     ]
 
--- cf bayes.createVocabList
-vocabulary :: [([String], Classification)] -> V.Vector String
-vocabulary = V.fromList . S.toList . S.unions . map (S.fromList . fst)
-
--- cf bayes.setOfWords2Vec
-wordVector :: V.Vector String -> [String] -> V.Vector Int
-wordVector v ws = V.replicate (V.length v) 0 // foldr (\w ps -> let Just i = V.elemIndex w v in (i, 1) : ps) [] ws
-
 spec :: Spec
 spec = do
     describe "classifyNB" $ do
-        let toVector = wordVector (vocabulary dataSet)
+        let toVector = wordSetVec (vocabulary (concat $ map fst dataSet))
             model = trainNB0 (map (\(f, s) -> (toVector f, s)) dataSet)
 
         it "classifies non-abusive stuff" $

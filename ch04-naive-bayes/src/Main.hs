@@ -1,9 +1,7 @@
 module Main (main) where
 
 import           Ch04NaiveBayes.NaiveBayes
-import qualified Data.Set as S
-import           Data.Vector ((//))
-import qualified Data.Vector as V
+import           Ch04NaiveBayes.Vocabulary
 
 -- cf bayes.loadDataSet
 -- Class1 is abusive, Class0 not
@@ -17,18 +15,9 @@ dataSet =
     , (["quit", "buying", "worthless", "dog", "food", "stupid"], Class1)
     ]
 
--- cf bayes.createVocabList
-vocabulary :: [([String], Classification)] -> V.Vector String
-vocabulary = V.fromList . S.toList . S.unions . map (S.fromList . fst)
-
--- cf bayes.setOfWords2Vec
-wordVector :: V.Vector String -> [String] -> V.Vector Int
-wordVector v ws = V.replicate (V.length v) 0 // foldr (\w ps -> let Just i = V.elemIndex w v in (i, 1) : ps) [] ws
-
 main :: IO ()
 main = do
-    let v = vocabulary dataSet
-        toVector = wordVector v
-        model = trainNB0 (map (\(f, s) -> (toVector f, s)) dataSet)
-    print $ classifyNB model (toVector ["love", "my", "dalmatian"])
-    print $ classifyNB model (toVector ["stupid", "garbage"])
+    let toSetVec = wordSetVec (vocabulary (concat $ map fst dataSet))
+        model = trainNB0 (map (\(f, s) -> (toSetVec f, s)) dataSet)
+    print $ classifyNB model (toSetVec ["love", "my", "dalmatian"])
+    print $ classifyNB model (toSetVec ["stupid", "garbage"])

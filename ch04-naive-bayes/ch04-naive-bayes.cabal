@@ -16,7 +16,9 @@ library
   hs-source-dirs:             lib
   default-language:           Haskell2010
   exposed-modules:            Ch04NaiveBayes.NaiveBayes
+                            , Ch04NaiveBayes.Vocabulary
   build-depends:              base
+                            , containers
                             , mlutil
                             , vector
 
@@ -28,7 +30,6 @@ executable ch04-naive-bayes-app
                             , Paths_ch04_naive_bayes
   build-depends:              base
                             , ch04-naive-bayes
-                            , containers
                             , vector
 
 test-suite spec
@@ -36,10 +37,11 @@ test-suite spec
   hs-source-dirs:             spec
   default-language:           Haskell2010
   main-is:                    Spec.hs
-  other-modules:              NaiveBayesSpec
-                            , DataFiles
+  other-modules:              DataFiles
+                            , NaiveBayesSpec
                             , Paths_ch04_naive_bayes
                             , Spec
+                            , VocabularySpec
   build-depends:              base
                             , ch04-naive-bayes
                             , containers
