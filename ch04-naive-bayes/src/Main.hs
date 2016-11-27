@@ -1,6 +1,9 @@
 module Main (main) where
 
 import           DogDemo
+import           EmailDemo
 
 main :: IO ()
-main = runDogDemos
+main = do
+    --runDogDemos
+    runEmailDemos
