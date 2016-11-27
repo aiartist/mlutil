@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module Main (main) where
 
 import qualified Data.Set as S
@@ -8,13 +10,14 @@ import           Prelude hiding (Word, sum)
 type Word = String
 type Sentence = [Word]
 type Vocabulary = V.Vector Word
+type WordVector = V.Vector Int
 
 -- cf bayes.loadDataSet
 sentences :: [Sentence]
 sentences =
     [ ["my", "dog", "has", "flea", "problems", "help", "please"]
     , ["maybe", "not", "take", "him", "to", "dog", "park", "stupid"]
-    , ["my", "dalmation", "is", "so", "cute", "I", "love", "him"]
+    , ["my", "dalmatian", "is", "so", "cute", "I", "love", "him"]
     , ["stop", "posting", "stupid", "worthless", "garbage"]
     , ["mr", "licks", "ate", "my", "steak", "how", "to", "stop", "him"]
     , ["quit", "buying", "worthless", "dog", "food", "stupid"]
@@ -30,7 +33,7 @@ vocabulary :: [Sentence] -> Vocabulary
 vocabulary = V.fromList . S.toList . S.unions . map S.fromList
 
 -- cf bayes.setOfWords2Vec
-wordVector :: Vocabulary -> Sentence -> V.Vector Int
+wordVector :: Vocabulary -> Sentence -> WordVector
 wordVector v ws = V.replicate (V.length v) 0 // foldr (\w ps -> let Just i = V.elemIndex w v in (i, 1) : ps) [] ws
 
 addV :: Num a => V.Vector a -> V.Vector a -> V.Vector a
@@ -48,8 +51,20 @@ divV xs ys = V.zipWith (\x y -> fromIntegral x / fromIntegral y) xs ys
 logV :: Floating a => V.Vector a -> V.Vector a
 logV = V.map log
 
+mulV :: Num a => V.Vector a -> V.Vector a -> V.Vector a
+mulV = V.zipWith (*)
+
+floatV :: (Integral a, Num b) => V.Vector a -> V.Vector b
+floatV = V.map fromIntegral
+
+data NaiveBayesModel = NaiveBayesModel
+    { _p0Vector :: V.Vector Double
+    , _p1Vector :: V.Vector Double
+    , _pClass :: Double
+    } deriving Show
+
 -- cf bayes.trainNB0
-trainNB0 :: [(V.Vector Int, Int)] -> (V.Vector Double, V.Vector Double, Double)
+trainNB0 :: [(WordVector, Int)] -> NaiveBayesModel
 trainNB0 rows =
     let columnCount = (V.length . fst . head) rows
         initialNum = V.replicate columnCount 1
@@ -64,15 +79,21 @@ trainNB0 rows =
         p0Vector = logV $ divV p0Num p0Denom
         p1Vector = logV $ divV p1Num p1Denom
         pAbusive = fromIntegral classTotal / fromIntegral rowCount
-    in (p0Vector, p1Vector, pAbusive)
+    in NaiveBayesModel p0Vector p1Vector pAbusive
+
+-- cf bayes.classifyNB
+classifyNB :: NaiveBayesModel -> WordVector -> Int
+classifyNB NaiveBayesModel{..} xs =
+    let xsF = floatV xs
+        p0 = sumV (mulV xsF _p0Vector) + log (1.0 - _pClass)
+        p1 = sumV (mulV xsF _p1Vector) + log _pClass
+    in if p1 > p0 then 1 else 0
 
 main :: IO ()
 main = do
     let v = vocabulary sentences
-    print v
-    print $ sentences !! 0
-    print $ wordVector v (sentences !! 0)
-    print $ sentences !! 3
-    print $ wordVector v (sentences !! 3)
-    let r = trainNB0 (zip (map (wordVector v) sentences) classes)
-    print r
+        toVector = wordVector v
+        trainingMatrix = (map toVector sentences)
+        model = trainNB0 (zip trainingMatrix classes)
+    print $ classifyNB model (toVector ["love", "my", "dalmatian"])
+    print $ classifyNB model (toVector ["stupid", "garbage"])
