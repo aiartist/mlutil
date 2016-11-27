@@ -23,5 +23,8 @@ spec = do
         it "should split on punctuation" $
             tokens "one.two,three;four" `shouldBe` ["one", "two", "three", "four"]
 
+        it "should split on symbols" $
+            tokens "one=two" `shouldBe` ["one", "two"]
+
 main :: IO ()
 main = hspec spec

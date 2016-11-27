@@ -4,4 +4,4 @@ import           Data.Char
 import           Data.List.Split
 
 tokens :: String -> [String]
-tokens = map (map toLower) . wordsBy (\c -> isPunctuation c || isSpace c)
+tokens = map (map toLower) . wordsBy (\c -> isPunctuation c || isSpace c || isSymbol c)
