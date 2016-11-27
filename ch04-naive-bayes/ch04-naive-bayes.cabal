@@ -27,6 +27,7 @@ executable ch04-naive-bayes-app
   main-is:                    Main.hs
   default-language:           Haskell2010
   other-modules:              DataFiles
+                            , DogDemo
                             , Paths_ch04_naive_bayes
   build-depends:              base
                             , ch04-naive-bayes
