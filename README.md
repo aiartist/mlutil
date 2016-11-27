@@ -33,7 +33,7 @@ The code has been tested on the following platforms:
 
 Individual subprojects may have their own prerequisites, so please consult their respective `README.md` files for more information.
 
-Once up and running with prerequisites, you can build or test individual projects or all projects using the helper scripts [`build`][buildscript] and [`test`][testscript] in this repo's root directory:
+Once up and running with prerequisites, you can clean, build or test individual projects or all projects using the helper scripts [`clean`][cleanscript], [`build`][buildscript] and [`test`][testscript] ([`clean.cmd`][cleancmd], [`build.cmd`][buildcmd] and [`test.cmd`][testcmd] respectively on Windows) in this repo's root directory:
 
 To build all projects:
 
@@ -55,14 +55,18 @@ The `test` script works in a similar manner. I'll write similar companion script
 
 [Licensed under the MIT License][licence]
 
+[buildcmd]: build.cmd
 [buildscript]: build
 [ch02knn]: ch02-knn/README.md
 [ch03decisiontrees]: ch03-decision-trees/README.md
 [ch04naivebayes]: ch04-naive-bayes/README.md
+[cleancmd]: clean.cmd
+[cleanscript]: clean
 [dh]: https://github.com/datahaskell
 [hmatrixpackage]: https://hackage.haskell.org/package/hmatrix
 [licence]: LICENSE
 [mlutil]: mlutil/README.md
 [pbharrin]: https://github.com/pbharrin/machinelearninginaction
+[testcmd]: test.cmd
 [testscript]: test
 [vectorpackage]: https://hackage.haskell.org/package/vector
