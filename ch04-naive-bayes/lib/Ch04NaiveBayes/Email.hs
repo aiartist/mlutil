@@ -3,6 +3,7 @@ module Ch04NaiveBayes.Email (tokens) where
 import           Data.Char
 import           Data.List.Split
 
+-- cf bayes.textParse
 -- |Tokens in String
 -- Unlike the Python code in Machine Learning in Action, this code purposefully
 -- does not split on certain Unicode characters such as "right single quotation
