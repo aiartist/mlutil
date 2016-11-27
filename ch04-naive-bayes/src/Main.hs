@@ -36,5 +36,8 @@ wordVector v ws = V.replicate (V.length v) 0 // foldr (\w ps -> let Just i = V.e
 main :: IO ()
 main = do
     let v = vocabulary sentences
+    print v
+    print $ sentences !! 0
     print $ wordVector v (sentences !! 0)
+    print $ sentences !! 3
     print $ wordVector v (sentences !! 3)
