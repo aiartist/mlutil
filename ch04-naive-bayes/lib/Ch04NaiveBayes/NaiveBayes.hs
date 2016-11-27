@@ -13,9 +13,9 @@ import           MLUtil.Primitives
 type WordVector = V.Vector Int
 
 data NaiveBayesModel = NaiveBayesModel
-    { _p0Vector :: V.Vector Double
-    , _p1Vector :: V.Vector Double
-    , _pClass :: Double
+    { nbmP0Vector :: V.Vector Double
+    , nbmP1Vector :: V.Vector Double
+    , nbmPClass1 :: Double
     } deriving Show
 
 -- cf bayes.trainNB0
@@ -40,6 +40,6 @@ trainNB0 rows =
 classifyNB :: NaiveBayesModel -> WordVector -> Int
 classifyNB NaiveBayesModel{..} xs =
     let xsF = floatV xs
-        p0 = sumV (mulV xsF _p0Vector) + log (1.0 - _pClass)
-        p1 = sumV (mulV xsF _p1Vector) + log _pClass
+        p0 = sumV (mulV xsF nbmP0Vector) + log (1.0 - nbmPClass1)
+        p1 = sumV (mulV xsF nbmP1Vector) + log nbmPClass1
     in if p1 > p0 then 1 else 0
