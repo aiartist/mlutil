@@ -33,6 +33,8 @@ library
                             , MLUtil.Imports
                             , MLUtil.LabelledMatrix
                             , MLUtil.Normalization
+                            , MLUtil.Primitives
+                            , MLUtil.Primitives.VectorPrim
                             , MLUtil.Roundable
                             , MLUtil.Sorting
                             , MLUtil.Test
@@ -67,6 +69,7 @@ test-suite spec
                             , RoundableSpec
                             , SortingSpec
                             , TreeSpec
+                            , VectorPrimSpec
   build-depends:              base
                             , binary
                             , containers
