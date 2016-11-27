@@ -26,6 +26,8 @@ executable ch04-naive-bayes-app
                             , Paths_ch04_naive_bayes
   build-depends:              base
                             , ch04-naive-bayes
+                            , containers
+                            , vector
 
 test-suite spec
   type:                       exitcode-stdio-1.0
