@@ -1,7 +1,8 @@
 module EmailDemo (runEmailDemos) where
 
 import           Ch04NaiveBayes.Email
-import           Control.Monad
+import           Ch04NaiveBayes.NaiveBayes
+import           Ch04NaiveBayes.Vocabulary
 import           Data.List
 import           Paths_ch04_naive_bayes
 import           System.Directory
@@ -13,14 +14,6 @@ getDataFileNames dir = do
     fullDir <- getDataFileName dir
     fileNames <- sort <$> listDirectory fullDir
     return $ map (fullDir </>) fileNames
-
-type Doc = ([String], Int)
-
-spamClass :: Int
-spamClass = 1
-
-hamClass :: Int
-hamClass = 0
 
 runEmailDemos :: IO ()
 runEmailDemos = do
@@ -34,9 +27,11 @@ runEmailDemos = do
         spamWordLists = map tokens spamFileStrs
         hamWordLists :: [[String]]
         hamWordLists = map tokens hamFileStrs
-        docList :: [([String], Int)]
-        docList = map (flip (,) spamClass) spamWordLists ++ map (flip (,) hamClass) hamWordLists
+        docList :: [([String], Classification)]
+        docList = map (flip (,) Class1) spamWordLists ++ map (flip (,) Class0) hamWordLists
         fullText :: [String]
         fullText = concat [concat spamWordLists, concat hamWordLists]
+        v = vocabulary (concat $ map fst docList)
     print $ length docList
     print $ length fullText
+    print $ length v
