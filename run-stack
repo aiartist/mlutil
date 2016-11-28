@@ -17,16 +17,22 @@ fi
 
 echo "cmd: stack $*"
 
-# TODO: Avoid running find twice!
-if [[ -z $(find . -name 'stack.yaml' -maxdepth 1) ]]; then
-  find . -name 'stack.yaml' -maxdepth 1 | while read yaml_path; do
-      yaml_dir=$(cd $(dirname $yaml_path); pwd -P)
-      echo "dir: $yaml_dir"
-      pushd $yaml_dir > /dev/null
-      run_stack_command $*
-      popd > /dev/null
-  done
-else
-  echo "dir: $current_dir"
+if [ -e stack.yaml ]; then
+  echo dir: $current_dir
   run_stack_command $*
+  exit 0
 fi
+
+stack_yaml_paths=($(find . -maxdepth 2 -name 'stack.yaml'))
+if [ -z ${stack_yaml_paths+x} ]; then
+  echo No stack.yaml files found
+  exit 1
+fi
+
+for stack_yaml_path in "${stack_yaml_paths[@]}"; do
+  stack_yaml_dir=$(cd $(dirname $stack_yaml_path); pwd -P)
+  echo "dir: $stack_yaml_dir"
+  pushd $stack_yaml_dir > /dev/null
+  run_stack_command $*
+  popd > /dev/null
+done
