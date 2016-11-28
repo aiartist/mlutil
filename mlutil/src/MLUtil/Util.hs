@@ -1,6 +1,8 @@
 module MLUtil.Util
-    ( forFold
+    ( deleteAt
+    , forFold
     , forFoldM
+    , removeAt
     ) where
 
 import           Control.Monad
@@ -22,3 +24,13 @@ forFold = flip . flip foldr
 -- 10
 forFoldM :: (Foldable t, Monad m) => b -> t a -> (b -> a -> m b) -> m b
 forFoldM = flip . flip foldM
+
+-- |Tuple consisting of list with element at given element removed and the element itself
+removeAt :: Int -> [a] -> Maybe ([a], a)
+removeAt idx xs
+    | idx < 0 || idx >= length xs = Nothing
+    | otherwise =  let (b, e) = splitAt idx xs in Just (b ++ drop 1 e, head e)
+
+-- |List with element at given element removed, special case of removeAt
+deleteAt :: Int -> [a] -> Maybe [a]
+deleteAt idx xs = removeAt idx xs >>= (return . fst)

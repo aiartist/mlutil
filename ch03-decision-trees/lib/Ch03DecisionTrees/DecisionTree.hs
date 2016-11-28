@@ -15,15 +15,10 @@ module Ch03DecisionTrees.DecisionTree
 import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
+import           MLUtil
 import           MLUtil.Graphics
-import           MLUtil.Tree
 
 type Record a l = ([a], l)
-
-deleteAt :: Int -> [a] -> [a]
-deleteAt idx xs =
-    let (b, e) = splitAt idx xs
-    in b ++ drop 1 e
 
 itemCounts :: Ord a => [a] -> M.Map a Int
 itemCounts = foldr
@@ -51,7 +46,7 @@ calculateShannonEntropy rs =
 -- TODO: Use vector instead of list for O(1) indexing
 splitDataSet :: Eq a => [Record a l] -> Int -> a -> [Record a l]
 splitDataSet rs axis value = map
-    (\(xs, l) -> (deleteAt axis xs, l)) $ filter (\(xs, _) -> xs !! axis == value)
+    (\(xs, l) -> let Just xs' = deleteAt axis xs in (xs', l)) $ filter (\(xs, _) -> xs !! axis == value)
     rs
 
 -- cf trees.chooseBestFeatureToSplit
@@ -88,7 +83,7 @@ mkDecisionTree dataSet labels =
             else
                 let (_, bestFeat) = chooseBestFeatureToSplit dataSet
                     bestFeatLabel = labels !! bestFeat
-                    labels' = deleteAt bestFeat labels
+                    Just labels' = deleteAt bestFeat labels
                     featValues = [features !! bestFeat | (features, _) <- dataSet]
                     uniqueVals = S.fromList featValues
                     childArrows = foldr (\value cts ->

@@ -69,6 +69,7 @@ test-suite spec
                             , RoundableSpec
                             , SortingSpec
                             , TreeSpec
+                            , UtilSpec
                             , VectorPrimSpec
   build-depends:              base
                             , binary
