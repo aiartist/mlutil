@@ -23,13 +23,9 @@ runEmailDemos = do
     hamFileNames <- getDataFileNames "email/ham"
     hamFileStrs <- mapM IOS.readFile hamFileNames
 
-    let spamWordLists :: [[String]]
-        spamWordLists = map tokens spamFileStrs
-        hamWordLists :: [[String]]
+    let spamWordLists = map tokens spamFileStrs
         hamWordLists = map tokens hamFileStrs
-        docList :: [([String], Classification)]
         docList = map (flip (,) Class1) spamWordLists ++ map (flip (,) Class0) hamWordLists
-        fullText :: [String]
         fullText = concat [concat spamWordLists, concat hamWordLists]
         v = vocabulary (concat $ map fst docList)
     print $ length docList
