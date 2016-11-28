@@ -37,6 +37,8 @@ executable ch04-naive-bayes-app
                             , Paths_ch04_naive_bayes
   build-depends:              base
                             , ch04-naive-bayes
+                            , directory
+                            , filepath
                             , strict
                             , vector
 
