@@ -17,6 +17,7 @@ module MLUtil
     , module MLUtil.Imports
     , module MLUtil.LabelledMatrix
     , module MLUtil.Normalization
+    , module MLUtil.Random
     , module MLUtil.Roundable
     , module MLUtil.Sorting
     , module MLUtil.Tree
@@ -28,6 +29,7 @@ import           MLUtil.Folding
 import           MLUtil.Imports
 import           MLUtil.LabelledMatrix
 import           MLUtil.Normalization
+import           MLUtil.Random
 import           MLUtil.Roundable
 import           MLUtil.Sorting
 import           MLUtil.Tree
