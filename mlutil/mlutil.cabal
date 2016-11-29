@@ -53,6 +53,7 @@ library
                             , hmatrix
                             , hspec
                             , process
+                            , random
                             , split
                             , temporary
                             , vector
