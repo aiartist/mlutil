@@ -27,6 +27,9 @@ getDataFileNames dir = do
     fileNames <- sort <$> listDirectory fullDir
     return $ map (fullDir </>) fileNames
 
+classifiedList :: Classification -> [a] -> [(a, Classification)]
+classifiedList cls = map (flip (,) cls)
+
 runEmailDemos :: IO ()
 runEmailDemos = do
     spamFileNames <- getDataFileNames "email/spam"
@@ -37,7 +40,8 @@ runEmailDemos = do
 
     let spamWordLists = map tokens spamFileStrs
         hamWordLists = map tokens hamFileStrs
-        docList = map (flip (,) Class1) spamWordLists ++ map (flip (,) Class0) hamWordLists
+        docList = classifiedList Class1 spamWordLists ++
+                    classifiedList Class0 hamWordLists
         fullText = concat [concat spamWordLists, concat hamWordLists]
         v = vocabulary (concat $ map fst docList)
     print $ length docList
