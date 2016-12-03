@@ -1,4 +1,4 @@
-module Ch04NaiveBayes.Email (tokens) where
+module Ch04NaiveBayes.Util (tokens) where
 
 import           Data.Char
 import           Data.List.Split

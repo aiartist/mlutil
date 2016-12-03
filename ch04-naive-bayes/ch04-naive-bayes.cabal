@@ -18,8 +18,8 @@ data-files:                   email/ham/*.txt
 library
   hs-source-dirs:             lib
   default-language:           Haskell2010
-  exposed-modules:            Ch04NaiveBayes.Email
-                            , Ch04NaiveBayes.NaiveBayes
+  exposed-modules:            Ch04NaiveBayes.NaiveBayes
+                            , Ch04NaiveBayes.Util
                             , Ch04NaiveBayes.Vocabulary
   build-depends:              base
                             , containers

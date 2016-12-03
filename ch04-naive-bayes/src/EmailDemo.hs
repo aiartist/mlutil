@@ -1,7 +1,7 @@
 module EmailDemo (runEmailDemos) where
 
-import           Ch04NaiveBayes.Email
 import           Ch04NaiveBayes.NaiveBayes
+import           Ch04NaiveBayes.Util
 import           Ch04NaiveBayes.Vocabulary
 import           Control.Exception
 import           Data.List
