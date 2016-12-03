@@ -1,3 +1,5 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module RSSDemo (runRSSDemos) where
 
 import           Ch04NaiveBayes.NaiveBayes
@@ -38,7 +40,7 @@ classifiedList :: Classification -> [a] -> [(a, Classification)]
 classifiedList cls = map (flip (,) cls)
 
 -- cf bayes.localWords
-localWords :: [String] -> [String] -> IO ()
+localWords :: [String] -> [String] -> IO (V.Vector String, NaiveBayesModel)
 localWords nySummaries sfSummaries = do
     let minLen = min (length nySummaries) (length sfSummaries)
         nyWordLists = take minLen $ map tokens nySummaries
@@ -61,6 +63,7 @@ localWords nySummaries sfSummaries = do
             testSet
         errorRate = 100.0 * fromIntegral errorCount / fromIntegral (length testSet)
     print errorRate
+    return (vocabList', model)
 
 -- cf bayes.calcMostFreq
 calcMostFreq :: Int -> [String] -> [String] -> [(String, Int)]
@@ -68,8 +71,23 @@ calcMostFreq n vocabList fullText =
     let ps = M.toList $ itemCounts fullText
     in take n $ sortOn (Down . snd) ps
 
+-- cf bayes.getTopWords
+getTopWords :: [String] -> [String] -> IO ()
+getTopWords ny sf = do
+    (vocabList, NaiveBayesModel{..}) <- localWords ny sf
+    let (topNY, topSF) = V.foldr (\(x, p0, p1) tops@(topNY, topSF) ->
+                if p0 > -6.0
+                    then (topNY, x : topSF)
+                    else if p1 > -6.0
+                            then (x : topNY, topSF)
+                            else tops)
+                ([], [])
+                (V.zip3 vocabList bmP0Vector nbmP1Vector)
+    print topNY
+    print topSF
+
 runRSSDemos :: IO ()
 runRSSDemos = do
     nyEntries <- rssEntries nyUrl
     sfEntries <- rssEntries sfUrl
-    localWords nyEntries sfEntries
+    getTopWords nyEntries sfEntries
