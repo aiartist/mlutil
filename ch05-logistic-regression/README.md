@@ -1,6 +1,6 @@
-# `ch04-naive-bayes`
+# `ch05-logistic-regression`
 
-Haskell versions of programs from chapter 4 of Machine Learning in Action
+Haskell versions of programs from chapter 5 of Machine Learning in Action
 
 # Install prerequisites
 
