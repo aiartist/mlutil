@@ -81,8 +81,10 @@ getTopWords ny sf = do
                 in (topNY', topSF'))
                 ([], [])
                 (V.zip3 vocabList nbmP0Vector nbmP1Vector)
-    print $ length topNY
-    print $ length topSF
+        sortedNY = sortOn (Down . snd) topNY
+        sortedSF = sortOn (Down . snd) topSF
+    print sortedSF
+    print sortedNY
 
 runRSSDemos :: IO ()
 runRSSDemos = do
