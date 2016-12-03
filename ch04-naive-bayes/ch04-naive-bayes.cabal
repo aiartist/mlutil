@@ -35,6 +35,7 @@ executable ch04-naive-bayes-app
                             , DogDemo
                             , EmailDemo
                             , Paths_ch04_naive_bayes
+                            , RSSDemo
   build-depends:              base
                             , ch04-naive-bayes
                             , containers
