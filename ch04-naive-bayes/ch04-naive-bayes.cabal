@@ -37,13 +37,17 @@ executable ch04-naive-bayes-app
                             , Paths_ch04_naive_bayes
                             , RSSDemo
   build-depends:              base
+                            , bytestring
                             , ch04-naive-bayes
                             , containers
                             , directory
+                            , feed
                             , filepath
+                            , lens
                             , mlutil
                             , strict
                             , vector
+                            , wreq
 
 test-suite spec
   type:                       exitcode-stdio-1.0
