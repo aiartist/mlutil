@@ -33,6 +33,12 @@ getDataFileNames dir = do
 classifiedList :: Classification -> [a] -> [(a, Classification)]
 classifiedList cls = map (flip (,) cls)
 
+-- cf bayes.calcMostFreq
+calcMostFreq :: [String] -> [String] -> [(String, Int)]
+calcMostFreq vocabList fullText =
+    let ps = M.toList $ itemCounts fullText
+    in take 30 $ sortOn (Down . snd) ps
+
 -- cf bayes.spamTest
 runEmailDemos :: IO ()
 runEmailDemos = do
@@ -52,9 +58,3 @@ runEmailDemos = do
     print $ length fullText
     print $ length vocabList
     print $ calcMostFreq ["a", "b", "c"] ["a", "a", "b", "c", "c", "c"]
-
--- cf bayes.calcMostFreq
-calcMostFreq :: [String] -> [String] -> [(String, Int)]
-calcMostFreq vocabList fullText =
-    let ps = M.toList $ itemCounts fullText
-    in take 30 $ sortOn (Down . snd) ps
