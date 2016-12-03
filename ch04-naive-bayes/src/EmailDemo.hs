@@ -5,8 +5,6 @@ import           Ch04NaiveBayes.NaiveBayes
 import           Ch04NaiveBayes.Vocabulary
 import           Control.Exception
 import           Data.List
-import qualified Data.Map as M
-import           Data.Ord
 import           MLUtil
 import           Paths_ch04_naive_bayes
 import           System.Directory
@@ -60,12 +58,6 @@ spamTest = do
             testSet
         errorRate = 100.0 * fromIntegral errorCount / fromIntegral (length testSet)
     print errorRate
-
--- cf bayes.calcMostFreq
-calcMostFreq :: [String] -> [String] -> [(String, Int)]
-calcMostFreq vocabList fullText =
-    let ps = M.toList $ itemCounts fullText
-    in take 30 $ sortOn (Down . snd) ps
 
 runEmailDemos :: IO ()
 runEmailDemos = do

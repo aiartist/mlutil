@@ -9,10 +9,10 @@ import           Test.Hspec
 spec :: Spec
 spec = do
     describe "tokens" $ do
-        it "should tokenize simple sentence" $
+        it "should tokenize simple sentence and remove small words" $
             tokens "This book is the best book on Python or M.L. I have ever laid eyes upon." `shouldBe`
-                ["this", "book", "is", "the", "best", "book", "on", "python"
-                , "or", "m", "l", "i", "have", "ever", "laid", "eyes", "upon"]
+                ["this", "book", "the", "best", "book", "python", "have"
+                , "ever", "laid", "eyes", "upon"]
 
         it "should collapse adjacent delimiters" $
             tokens "one  two  three  four" `shouldBe` ["one", "two", "three", "four"]

@@ -13,4 +13,6 @@ import           Data.List.Split
 -- We should consider using ICU transliteration etc. (see https://github.com/rcook/beginning-practical-haskell/blob/master/child-health-data/lib/ChildHealthData/CSV.hs)
 -- to do a better job as necessary.
 tokens :: String -> [String]
-tokens = map (map toLower) . wordsBy (\c -> isPunctuation c || isSpace c || isSymbol c)
+tokens s = filter
+            ((> 2) . length)
+            (map (map toLower) . wordsBy (\c -> isPunctuation c || isSpace c || isSymbol c) $ s)
