@@ -25,6 +25,8 @@ wordBagVec v ws = V.replicate (V.length v) 0 // (M.toList $ foldr (\w m ->
 -- cf bayes.setOfWords2Vec
 wordSetVec :: V.Vector String -> [String] -> V.Vector Int
 wordSetVec v ws = V.replicate (V.length v) 0 // foldr (\w ps ->
-    let Just i = w `V.elemIndex` v in (i, 1) : ps)
+    case w `V.elemIndex` v of
+        Nothing -> ps
+        Just i -> (i, 1) : ps)
     []
     ws
