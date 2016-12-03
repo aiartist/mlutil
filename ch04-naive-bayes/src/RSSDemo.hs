@@ -10,7 +10,6 @@ import           Data.List
 import qualified Data.Map as M
 import           Data.Ord
 import qualified Data.Vector as V
-import           Debug.Trace
 import           MLUtil
 import           Network.Wreq
 import           Text.Feed.Import
