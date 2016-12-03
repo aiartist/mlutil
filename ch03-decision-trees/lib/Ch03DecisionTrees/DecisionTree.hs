@@ -1,5 +1,3 @@
-{-# LANGUAGE LambdaCase #-}
-
 module Ch03DecisionTrees.DecisionTree
     ( Record (..)
     , calculateShannonEntropy
@@ -19,11 +17,6 @@ import           MLUtil
 import           MLUtil.Graphics
 
 type Record a l = ([a], l)
-
-itemCounts :: Ord a => [a] -> M.Map a Int
-itemCounts = foldr
-    (M.alter (\case { Nothing -> Just 1; Just n -> Just $ n + 1 }))
-    M.empty
 
 -- cf trees.majorityCnt
 majorityCount :: Ord a => [a] -> (a, Int)

@@ -1,11 +1,15 @@
+{-# LANGUAGE LambdaCase #-}
+
 module MLUtil.Util
     ( deleteAt
     , forFold
     , forFoldM
+    , itemCounts
     , removeAt
     ) where
 
 import           Control.Monad
+import qualified Data.Map as M
 
 -- |Description of 'forFold'
 --
@@ -34,3 +38,8 @@ removeAt idx xs
 -- |List with element at given element removed, special case of removeAt
 deleteAt :: Int -> [a] -> Maybe [a]
 deleteAt idx xs = removeAt idx xs >>= (return . fst)
+
+itemCounts :: Ord a => [a] -> M.Map a Int
+itemCounts = foldr
+    (M.alter (\case Nothing -> Just 1; Just n -> Just $ n + 1))
+    M.empty
