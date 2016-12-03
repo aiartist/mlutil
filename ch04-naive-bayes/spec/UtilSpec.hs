@@ -1,9 +1,9 @@
-module EmailSpec
+module UtilSpec
     ( main
     , spec
     ) where
 
-import           Ch04NaiveBayes.Email
+import           Ch04NaiveBayes.Util
 import           Test.Hspec
 
 spec :: Spec
