@@ -75,12 +75,10 @@ calcMostFreq n vocabList fullText =
 getTopWords :: [String] -> [String] -> IO ()
 getTopWords ny sf = do
     (vocabList, NaiveBayesModel{..}) <- localWords ny sf
-    let (topNY, topSF) = V.foldr (\(x, p0, p1) tops@(topNY, topSF) ->
-                if p0 > -6.0
-                    then (topNY, (x, p0) : topSF)
-                    else if p1 > -6.0
-                            then ((x, p1) : topNY, topSF)
-                            else tops)
+    let (topNY, topSF) = V.foldr (\(x, p0, p1) (topNY, topSF) ->
+                let topNY' = if p1 > -6.0 then (x, p1) : topNY else topNY
+                    topSF' = if p0 > -6.0 then (x, p0) : topSF else topSF
+                in (topNY', topSF'))
                 ([], [])
                 (V.zip3 vocabList nbmP0Vector nbmP1Vector)
     print $ length topNY
