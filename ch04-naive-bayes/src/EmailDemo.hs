@@ -5,6 +5,9 @@ import           Ch04NaiveBayes.NaiveBayes
 import           Ch04NaiveBayes.Vocabulary
 import           Control.Exception
 import           Data.List
+import qualified Data.Map as M
+import           Data.Ord
+import           MLUtil
 import           Paths_ch04_naive_bayes
 import           System.Directory
 import           System.FilePath
@@ -30,6 +33,7 @@ getDataFileNames dir = do
 classifiedList :: Classification -> [a] -> [(a, Classification)]
 classifiedList cls = map (flip (,) cls)
 
+-- cf bayes.spamTest
 runEmailDemos :: IO ()
 runEmailDemos = do
     spamFileNames <- getDataFileNames "email/spam"
@@ -43,7 +47,14 @@ runEmailDemos = do
         docList = classifiedList Class1 spamWordLists ++
                     classifiedList Class0 hamWordLists
         fullText = concat [concat spamWordLists, concat hamWordLists]
-        v = vocabulary (concat $ map fst docList)
+        vocabList = vocabulary (concat $ map fst docList)
     print $ length docList
     print $ length fullText
-    print $ length v
+    print $ length vocabList
+    print $ calcMostFreq ["a", "b", "c"] ["a", "a", "b", "c", "c", "c"]
+
+-- cf bayes.calcMostFreq
+calcMostFreq :: [String] -> [String] -> [(String, Int)]
+calcMostFreq vocabList fullText =
+    let ps = M.toList $ itemCounts fullText
+    in take 30 $ sortOn (Down . snd) ps
