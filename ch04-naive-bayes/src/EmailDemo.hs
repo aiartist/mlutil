@@ -33,15 +33,9 @@ getDataFileNames dir = do
 classifiedList :: Classification -> [a] -> [(a, Classification)]
 classifiedList cls = map (flip (,) cls)
 
--- cf bayes.calcMostFreq
-calcMostFreq :: [String] -> [String] -> [(String, Int)]
-calcMostFreq vocabList fullText =
-    let ps = M.toList $ itemCounts fullText
-    in take 30 $ sortOn (Down . snd) ps
-
 -- cf bayes.spamTest
-runEmailDemos :: IO ()
-runEmailDemos = do
+spamTest :: IO ()
+spamTest = do
     spamFileNames <- getDataFileNames "email/spam"
     spamFileStrs <- mapM readChar8File spamFileNames
 
@@ -54,7 +48,25 @@ runEmailDemos = do
                     classifiedList Class0 hamWordLists
         fullText = concat [concat spamWordLists, concat hamWordLists]
         vocabList = vocabulary (concat $ map fst docList)
-    print $ length docList
-    print $ length fullText
-    print $ length vocabList
-    print $ calcMostFreq ["a", "b", "c"] ["a", "a", "b", "c", "c", "c"]
+    Just (trainingSet, testSet) <- choiceExtractN 10 docList
+    let trainMat = foldr (\(xs, c) vs -> (wordSetVec vocabList xs, c) : vs) [] trainingSet
+        model = trainNB0 trainMat
+        errorCount = foldr
+            (\(xs, c) n ->
+                let wordVec = wordSetVec vocabList xs
+                    c' = classifyNB model wordVec
+                in if c' == c then n else n + 1)
+            0
+            testSet
+        errorRate = 100.0 * fromIntegral errorCount / fromIntegral (length testSet)
+    print errorRate
+
+-- cf bayes.calcMostFreq
+calcMostFreq :: [String] -> [String] -> [(String, Int)]
+calcMostFreq vocabList fullText =
+    let ps = M.toList $ itemCounts fullText
+    in take 30 $ sortOn (Down . snd) ps
+
+runEmailDemos :: IO ()
+runEmailDemos = do
+    spamTest
