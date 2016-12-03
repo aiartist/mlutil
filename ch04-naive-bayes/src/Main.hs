@@ -6,6 +6,6 @@ import           RSSDemo
 
 main :: IO ()
 main = do
-    --runDogDemos
-    --runEmailDemos
+    runDogDemos
+    runEmailDemos
     runRSSDemos
