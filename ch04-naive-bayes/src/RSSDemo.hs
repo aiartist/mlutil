@@ -10,6 +10,7 @@ import           Data.List
 import qualified Data.Map as M
 import           Data.Ord
 import qualified Data.Vector as V
+import           Debug.Trace
 import           MLUtil
 import           Network.Wreq
 import           Text.Feed.Import
@@ -38,8 +39,8 @@ classifiedList :: Classification -> [a] -> [(a, Classification)]
 classifiedList cls = map (flip (,) cls)
 
 -- cf bayes.localWords
-localWords :: Int -> [String] -> [String] -> IO ()
-localWords n nySummaries sfSummaries = do
+localWords :: [String] -> [String] -> IO ()
+localWords nySummaries sfSummaries = do
     let minLen = min (length nySummaries) (length sfSummaries)
         nyWordLists = take minLen $ map tokens nySummaries
         sfWordLists = take minLen $ map tokens sfSummaries
@@ -49,7 +50,7 @@ localWords n nySummaries sfSummaries = do
         vocabList = V.toList vocabV
         top30Words = calcMostFreq 30 vocabList fullText
         vocabList' =  V.fromList $ vocabList \\ map fst top30Words
-    Just (trainingSet, testSet) <- choiceExtractN n docList
+    Just (trainingSet, testSet) <- choiceExtractN 20 docList
     let trainMat = foldr (\(xs, c) vs -> (wordBagVec vocabList' xs, c) : vs) [] trainingSet
         model = trainNB0 trainMat
         errorCount = foldr
@@ -70,10 +71,6 @@ calcMostFreq n vocabList fullText =
 
 runRSSDemos :: IO ()
 runRSSDemos = do
-    {-
     nyEntries <- rssEntries nyUrl
     sfEntries <- rssEntries sfUrl
-    print $ head nyEntries
-    print $ head sfEntries
-    -}
-    localWords 2 ["one", "two", "one"] ["one", "three", "four", "five", "one"]
+    localWords nyEntries sfEntries
