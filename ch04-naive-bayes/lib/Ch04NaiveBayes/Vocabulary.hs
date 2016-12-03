@@ -16,8 +16,9 @@ vocabulary = V.fromList . S.toAscList . S.fromList
 -- cf bayes.bagOfWords2VecMN
 wordBagVec :: V.Vector String -> [String] -> V.Vector Int
 wordBagVec v ws = V.replicate (V.length v) 0 // (M.toList $ foldr (\w m ->
-    let Just i = w `V.elemIndex` v
-    in M.alter (\mb -> case mb of Nothing -> Just 1; Just n -> Just $ n + 1) i m)
+    case w `V.elemIndex` v of
+        Nothing -> m
+        Just i -> M.alter (\mb -> case mb of Nothing -> Just 1; Just n -> Just $ n + 1) i m)
     M.empty
     ws)
 
