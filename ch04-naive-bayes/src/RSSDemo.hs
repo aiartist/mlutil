@@ -77,14 +77,14 @@ getTopWords ny sf = do
     (vocabList, NaiveBayesModel{..}) <- localWords ny sf
     let (topNY, topSF) = V.foldr (\(x, p0, p1) tops@(topNY, topSF) ->
                 if p0 > -6.0
-                    then (topNY, x : topSF)
+                    then (topNY, (x, p0) : topSF)
                     else if p1 > -6.0
-                            then (x : topNY, topSF)
+                            then ((x, p1) : topNY, topSF)
                             else tops)
                 ([], [])
-                (V.zip3 vocabList bmP0Vector nbmP1Vector)
-    print topNY
-    print topSF
+                (V.zip3 vocabList nbmP0Vector nbmP1Vector)
+    print $ length topNY
+    print $ length topSF
 
 runRSSDemos :: IO ()
 runRSSDemos = do
