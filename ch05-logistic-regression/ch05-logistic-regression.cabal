@@ -26,8 +26,10 @@ executable ch05-logistic-regression-app
                             , Paths_ch05_logistic_regression
                             , SigmoidDemo
                             , UtilDemo
-  build-depends:              base
+  build-depends:              Chart
+                            , base
                             , ch05-logistic-regression
+                            , mlutil
 
 test-suite spec
   type:                       exitcode-stdio-1.0

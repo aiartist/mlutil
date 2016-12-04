@@ -12,7 +12,6 @@ import           Graphics.Rendering.Chart.Backend.Diagrams
 import           Graphics.Rendering.Chart.Easy
 import           MLUtil.Graphics.Flowchart
 import           MLUtil.Graphics.Imports
-import           MLUtil.Graphics.ScatterPlot
 
 data ChartLabels = ChartLabels
     { clTitle :: Maybe String
@@ -27,7 +26,7 @@ defaultChartLabels = ChartLabels
     , clYAxisLabel = Nothing
     }
 
-renderChartSVG :: FilePath -> ChartLabels ->[ScatterPlot] -> IO ()
+renderChartSVG :: (PlotValue a, ToPlot p) => FilePath -> ChartLabels -> [EC (Layout a a) (p a a)] -> IO ()
 renderChartSVG path ChartLabels{..} ps = toFile def path $ do
     let setMaybe p (Just x) = p .= x
         setMaybe p Nothing = return ()
