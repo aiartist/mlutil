@@ -24,6 +24,7 @@ executable ch04-logistic-regression-app
   default-language:           Haskell2010
   other-modules:              DataFiles
                             , Paths_ch05_logistic_regression
+                            , SigmoidDemo
                             , UtilDemo
   build-depends:              base
                             , ch05-logistic-regression
