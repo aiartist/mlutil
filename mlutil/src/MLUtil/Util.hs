@@ -39,6 +39,7 @@ removeAt idx xs
 deleteAt :: Int -> [a] -> Maybe [a]
 deleteAt idx xs = removeAt idx xs >>= (return . fst)
 
+-- |Map of distinct elements to number of occurrences in list
 itemCounts :: Ord a => [a] -> M.Map a Int
 itemCounts = foldr
     (M.alter (\case Nothing -> Just 1; Just n -> Just $ n + 1))
