@@ -14,6 +14,7 @@ Lorem ipsum etc. etc. etc.
 module MLUtil
     ( module MLUtil.Arithmetic
     , module MLUtil.Folding
+    , module MLUtil.IO
     , module MLUtil.Imports
     , module MLUtil.LabelledMatrix
     , module MLUtil.Normalization
@@ -26,6 +27,7 @@ module MLUtil
 
 import           MLUtil.Arithmetic
 import           MLUtil.Folding
+import           MLUtil.IO
 import           MLUtil.Imports
 import           MLUtil.LabelledMatrix
 import           MLUtil.Normalization

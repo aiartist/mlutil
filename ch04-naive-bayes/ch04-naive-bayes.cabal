@@ -45,7 +45,6 @@ executable ch04-naive-bayes-app
                             , filepath
                             , lens
                             , mlutil
-                            , strict
                             , vector
                             , wreq
 

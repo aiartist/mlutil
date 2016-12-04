@@ -30,6 +30,7 @@ library
                             , MLUtil.Graphics.LabelledMatrixPlot
                             , MLUtil.Graphics.Rendering
                             , MLUtil.Graphics.ScatterPlot
+                            , MLUtil.IO
                             , MLUtil.Imports
                             , MLUtil.LabelledMatrix
                             , MLUtil.Normalization
@@ -55,6 +56,7 @@ library
                             , process
                             , random
                             , split
+                            , strict
                             , temporary
                             , vector
                             , vector-algorithms
