@@ -42,5 +42,5 @@ testGradAscent = do
 
 runGradientAscentDemos :: IO ()
 runGradientAscentDemos = do
-    --createSigmoidFigures
+    createSigmoidFigures
     testGradAscent
