@@ -51,7 +51,7 @@ localWords nySummaries sfSummaries = do
         vocabList = V.toList vocabV
         top30Words = calcMostFreq 30 vocabList fullText
         vocabList' =  V.fromList $ vocabList \\ map fst top30Words
-    Just (trainingSet, testSet) <- choiceExtractN 20 docList
+    Just (trainingSet, testSet) <- choiceExtract 20 docList
     let trainMat = foldr (\(xs, c) vs -> (wordBagVec vocabList' xs, c) : vs) [] trainingSet
         model = trainNB0 trainMat
         errorCount = foldr

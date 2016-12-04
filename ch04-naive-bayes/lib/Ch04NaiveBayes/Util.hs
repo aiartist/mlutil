@@ -33,7 +33,7 @@ trainAndTest spamFileStrs hamFileStrs = do
                     classifiedList Class0 hamWordLists
         fullText = concat [concat spamWordLists, concat hamWordLists]
         vocabList = vocabulary (concat $ map fst docList)
-    Just (trainingSet, testSet) <- choiceExtractN 10 docList
+    Just (trainingSet, testSet) <- choiceExtract 10 docList
     let trainMat = foldr (\(xs, c) vs -> (wordSetVec vocabList xs, c) : vs) [] trainingSet
         model = trainNB0 trainMat
         errorCount = foldr
