@@ -25,9 +25,9 @@ spamTest = do
     spamFileStrs <- mapM readChar8File spamFileNames
     hamFileNames <- getDataFileNames "email/ham"
     hamFileStrs <- mapM readChar8File hamFileNames
-    ei <- genExtractIndices 10 spamFileStrs hamFileStrs
+    ei <- genExtractIndices 1 spamFileStrs hamFileStrs
     let errorRate = trainAndTest ei spamFileStrs hamFileStrs
-    putStrLn $ "spamTest errorRate=" ++ show errorRate
+    putStrLn $ "spamTest error% = " ++ show (errorRate * 100.0)
 
 runEmailDemos :: IO ()
 runEmailDemos = spamTest

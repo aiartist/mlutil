@@ -4,7 +4,27 @@ module UtilSpec
     ) where
 
 import           Ch04NaiveBayes.Util
+import           Data.List
+import           Data.Ratio
+import           DataFiles
+import           MLUtil
+import           System.Directory
+import           System.FilePath
 import           Test.Hspec
+
+getDataFileNames :: FilePath -> IO [FilePath]
+getDataFileNames dir = do
+    fullDir <- getDataFileName dir
+    fileNames <- sort <$> listDirectory fullDir
+    return $ map (fullDir </>) fileNames
+
+getSpamAndHam :: IO ([String], [String])
+getSpamAndHam = do
+    spamFileNames <- getDataFileNames "email/spam"
+    spamFileStrs <- mapM readChar8File spamFileNames
+    hamFileNames <- getDataFileNames "email/ham"
+    hamFileStrs <- mapM readChar8File hamFileNames
+    return (spamFileStrs, hamFileStrs)
 
 spec :: Spec
 spec = do
@@ -31,6 +51,22 @@ spec = do
             tokens "you’re" `shouldBe` ["you", "re"]
             tokens "you\u2019re" `shouldBe` ["you", "re"]
         -}
+
+    describe "trainAndTest" $ do
+        it "should have 0 error rate" $ do
+            (spam, ham) <- getSpamAndHam
+            let Just testExtract = mkExtractIndices 50 [0] -- 49 elements of training data
+            trainAndTest testExtract spam ham `shouldBe` 0
+
+        it "should have medium error rate" $ do
+            (spam, ham) <- getSpamAndHam
+            let Just testExtract = mkExtractIndices 50 [34, 33 .. 1] -- 16 elements of training data
+            trainAndTest testExtract spam ham `shouldBe` 5 % 17
+
+        it "should have high error rate" $ do
+            (spam, ham) <- getSpamAndHam
+            let Just testExtract = mkExtractIndices 50 [49, 48 .. 1] -- 1 element of training data
+            trainAndTest testExtract spam ham `shouldBe` 25 % 49
 
 main :: IO ()
 main = hspec spec

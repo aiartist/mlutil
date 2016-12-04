@@ -62,5 +62,8 @@ test-suite spec
   build-depends:              base
                             , ch04-naive-bayes
                             , containers
+                            , directory
+                            , filepath
                             , hspec
+                            , mlutil
                             , vector

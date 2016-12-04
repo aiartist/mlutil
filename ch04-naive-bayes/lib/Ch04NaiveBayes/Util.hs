@@ -7,6 +7,7 @@ import           Ch04NaiveBayes.NaiveBayes
 import           Ch04NaiveBayes.Vocabulary
 import           Data.Char
 import           Data.List.Split
+import           Data.Ratio
 import           MLUtil
 
 -- cf bayes.textParse
@@ -25,7 +26,7 @@ tokens s = filter
 
 -- cf bayes.spamTest
 -- |Naive Bayes model trained from extracted portion of data
-trainAndTest :: ExtractIndices -> [String] -> [String] -> Double
+trainAndTest :: ExtractIndices -> [String] -> [String] -> Ratio Int
 trainAndTest testExtract spamFileStrs hamFileStrs =
     let spamWordLists = map tokens spamFileStrs
         hamWordLists = map tokens hamFileStrs
@@ -36,6 +37,7 @@ trainAndTest testExtract spamFileStrs hamFileStrs =
         Just (trainingSet, testSet) = extract testExtract docList
         trainMat = foldr (\(xs, c) vs -> (wordSetVec vocabList xs, c) : vs) [] trainingSet
         model = trainNB0 trainMat
+        errorCount :: Int
         errorCount = foldr
             (\(xs, c) n ->
                 let wordVec = wordSetVec vocabList xs
@@ -43,8 +45,7 @@ trainAndTest testExtract spamFileStrs hamFileStrs =
                 in if c' == c then n else n + 1)
             0
             testSet
-        errorRate = 100.0 * fromIntegral errorCount / fromIntegral (length testSet)
-    in errorRate
+    in errorCount % (length testSet)
 
 classifiedList :: Classification -> [a] -> [(a, Classification)]
 classifiedList cls = map (flip (,) cls)
