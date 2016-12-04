@@ -13,6 +13,11 @@ getDataFileNames dir = do
     fileNames <- sort <$> listDirectory fullDir
     return $ map (fullDir </>) fileNames
 
+genExtractIndices :: Int -> [a] -> [a] -> IO ExtractIndices
+genExtractIndices c s h =
+    let Just action = choiceExtractIndices c (length s + length h)
+    in action >>= \ei -> return ei
+
 -- cf bayes.spamTest
 spamTest :: IO ()
 spamTest = do
@@ -20,7 +25,8 @@ spamTest = do
     spamFileStrs <- mapM readChar8File spamFileNames
     hamFileNames <- getDataFileNames "email/ham"
     hamFileStrs <- mapM readChar8File hamFileNames
-    errorRate <- trainAndTest spamFileStrs hamFileStrs
+    ei <- genExtractIndices 10 spamFileStrs hamFileStrs
+    let errorRate = trainAndTest ei spamFileStrs hamFileStrs
     putStrLn $ "spamTest errorRate=" ++ show errorRate
 
 runEmailDemos :: IO ()

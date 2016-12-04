@@ -24,17 +24,17 @@ tokens s = filter
             (map (map toLower) . wordsBy (\c -> isPunctuation c || isSpace c || isSymbol c) $ s)
 
 -- cf bayes.spamTest
--- |Return naive Bayes model trained from random partition of data
-trainAndTest :: [String] -> [String] -> IO Double
-trainAndTest spamFileStrs hamFileStrs = do
+-- |Naive Bayes model trained from extracted portion of data
+trainAndTest :: ExtractIndices -> [String] -> [String] -> Double
+trainAndTest testExtract spamFileStrs hamFileStrs =
     let spamWordLists = map tokens spamFileStrs
         hamWordLists = map tokens hamFileStrs
         docList = classifiedList Class1 spamWordLists ++
                     classifiedList Class0 hamWordLists
         fullText = concat [concat spamWordLists, concat hamWordLists]
         vocabList = vocabulary (concat $ map fst docList)
-    Just (trainingSet, testSet) <- choiceExtract 10 docList
-    let trainMat = foldr (\(xs, c) vs -> (wordSetVec vocabList xs, c) : vs) [] trainingSet
+        Just (trainingSet, testSet) = extract testExtract docList
+        trainMat = foldr (\(xs, c) vs -> (wordSetVec vocabList xs, c) : vs) [] trainingSet
         model = trainNB0 trainMat
         errorCount = foldr
             (\(xs, c) n ->
@@ -44,7 +44,7 @@ trainAndTest spamFileStrs hamFileStrs = do
             0
             testSet
         errorRate = 100.0 * fromIntegral errorCount / fromIntegral (length testSet)
-    return errorRate
+    in errorRate
 
 classifiedList :: Classification -> [a] -> [(a, Classification)]
 classifiedList cls = map (flip (,) cls)
