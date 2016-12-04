@@ -1,14 +1,13 @@
 module GradientAscentDemo (runGradientAscentDemos) where
 
+import           Ch05LogisticRegression.GradientAscent
+import           DataFiles
+import           MLUtil
 import           MLUtil.Graphics
 import           Graphics.Rendering.Chart.Easy
 
 waveform :: (Double -> Double) -> [Double] -> [(Double, Double)]
 waveform f xs = [ (x, f x) | x <- xs ]
-
--- cf logRegres.sigmoid
-sigmoid :: Double -> Double
-sigmoid x = 1.0 / (1.0 + exp (-x))
 
 createSigmoidFigures :: IO ()
 createSigmoidFigures = do
@@ -29,16 +28,10 @@ createSigmoidFigures = do
         }
         [ (line "sigmoid(x)" [ waveform sigmoid [ -60.0, -59.0 .. 60.0 ] ]) ]
 
--- cf logRegres.loadDataSet
-loadDataSet :: FilePath -> IO ()
-loadDataSet = return ())
-
--- cf logRegres.gradAscent
-gradAscent :: IO ()
-gradAscent = return ()
-
 testGradAscent :: IO ()
-testGradAscent = return ()
+testGradAscent = do
+    Just matrix <- getDataFileName "testSet.txt" >>= readLabelledMatrix
+    print matrix
 
 runGradientAscentDemos :: IO ()
 runGradientAscentDemos = do
