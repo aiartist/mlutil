@@ -6,6 +6,7 @@ import           Graphics.Rendering.Chart.Easy
 waveform :: (Double -> Double) -> [Double] -> [(Double, Double)]
 waveform f xs = [ (x, f x) | x <- xs ]
 
+-- cf logRegres.sigmoid
 sigmoid :: Double -> Double
 sigmoid x = 1.0 / (1.0 + exp (-x))
 
@@ -28,7 +29,18 @@ createSigmoidFigures = do
         }
         [ (line "sigmoid(x)" [ waveform sigmoid [ -60.0, -59.0 .. 60.0 ] ]) ]
 
+-- cf logRegres.loadDataSet
+loadDataSet :: FilePath -> IO ()
+loadDataSet = return ())
+
+-- cf logRegres.gradAscent
+gradAscent :: IO ()
+gradAscent = return ()
+
+testGradAscent :: IO ()
+testGradAscent = return ()
+
 runGradientAscentDemos :: IO ()
 runGradientAscentDemos = do
     --createSigmoidFigures
-    return ()
+    testGradAscent
