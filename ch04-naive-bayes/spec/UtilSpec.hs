@@ -21,10 +21,10 @@ getDataFileNames dir = do
 getSpamAndHam :: IO ([String], [String])
 getSpamAndHam = do
     spamFileNames <- getDataFileNames "email/spam"
-    spamFileStrs <- mapM readChar8File spamFileNames
+    spam <- mapM readChar8File spamFileNames
     hamFileNames <- getDataFileNames "email/ham"
-    hamFileStrs <- mapM readChar8File hamFileNames
-    return (spamFileStrs, hamFileStrs)
+    ham <- mapM readChar8File hamFileNames
+    return (spam, ham)
 
 spec :: Spec
 spec = do

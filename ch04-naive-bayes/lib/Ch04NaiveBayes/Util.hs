@@ -27,25 +27,22 @@ tokens s = filter
 -- cf bayes.spamTest
 -- |Naive Bayes model trained from extracted portion of data
 trainAndTest :: ExtractIndices -> [String] -> [String] -> Ratio Int
-trainAndTest testExtract spamFileStrs hamFileStrs =
-    let spamWordLists = map tokens spamFileStrs
-        hamWordLists = map tokens hamFileStrs
-        docList = classifiedList Class1 spamWordLists ++
-                    classifiedList Class0 hamWordLists
-        fullText = concat [concat spamWordLists, concat hamWordLists]
-        vocabList = vocabulary (concat $ map fst docList)
-        Just (trainingSet, testSet) = extract testExtract docList
-        trainMat = foldr (\(xs, c) vs -> (wordSetVec vocabList xs, c) : vs) [] trainingSet
-        model = trainNB0 trainMat
-        errorCount :: Int
+trainAndTest testExtract class0Strs class1Strs =
+    let class0Tokens = map tokens class0Strs
+        class1Tokens = map tokens class1Strs
+        classLists = classList Class0 class0Tokens ++ classList Class1 class1Tokens
+        v = vocabulary (concat $ map fst classLists)
+        Just (trainingData, testData) = extract testExtract classLists
+        trainingMatrix = foldr (\(xs, c) vs -> (wordSetVec v xs, c) : vs) [] trainingData
+        model = trainNB0 trainingMatrix
         errorCount = foldr
             (\(xs, c) n ->
-                let wordVec = wordSetVec vocabList xs
+                let wordVec = wordSetVec v xs
                     c' = classifyNB model wordVec
                 in if c' == c then n else n + 1)
             0
-            testSet
-    in errorCount % (length testSet)
+            testData
+    in errorCount % (length testData)
 
-classifiedList :: Classification -> [a] -> [(a, Classification)]
-classifiedList cls = map (flip (,) cls)
+classList :: Classification -> [a] -> [(a, Classification)]
+classList cls = map (flip (,) cls)
