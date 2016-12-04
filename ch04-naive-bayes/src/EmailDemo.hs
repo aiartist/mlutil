@@ -21,8 +21,7 @@ spamTest = do
     hamFileNames <- getDataFileNames "email/ham"
     hamFileStrs <- mapM readChar8File hamFileNames
     errorRate <- trainAndTest spamFileStrs hamFileStrs
-    print errorRate
+    putStrLn $ "spamTest errorRate=" ++ show errorRate
 
 runEmailDemos :: IO ()
-runEmailDemos = do
-    spamTest
+runEmailDemos = spamTest
