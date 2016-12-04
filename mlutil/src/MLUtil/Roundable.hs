@@ -20,3 +20,6 @@ instance (Roundable a, VS.Storable a) => Roundable (Vector a) where
 
 instance (Roundable a, VS.Storable a, Element a) => Roundable (Matrix a) where
     roundToPrecision n = mapMatrixWithIndex (\_ x -> roundToPrecision n x)
+
+instance Roundable a => Roundable [a] where
+    roundToPrecision n = map (roundToPrecision n)

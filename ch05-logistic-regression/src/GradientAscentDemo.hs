@@ -1,9 +1,13 @@
+{-# LANGUAGE RecordWildCards #-}
+
 module GradientAscentDemo (runGradientAscentDemos) where
 
 import           Ch05LogisticRegression.GradientAscent
 import           DataFiles
+import qualified Data.Vector.Unboxed as VU
 import           MLUtil
-import           MLUtil.Graphics
+import           MLUtil ((|||))
+import           MLUtil.Graphics hiding ((|||))
 import           Graphics.Rendering.Chart.Easy
 
 waveform :: (Double -> Double) -> [Double] -> [(Double, Double)]
@@ -30,8 +34,11 @@ createSigmoidFigures = do
 
 testGradAscent :: IO ()
 testGradAscent = do
-    Just matrix <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-    print matrix
+    Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
+    let values = ones (rows lmValues) 1 ||| lmValues
+        labels = col (map fromIntegral (VU.toList lmLabelIds))
+        r = gradAscent 0.001 500 values labels
+    print r
 
 runGradientAscentDemos :: IO ()
 runGradientAscentDemos = do

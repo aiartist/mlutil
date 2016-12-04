@@ -1,12 +1,16 @@
 module MLUtil.Arithmetic
-    ( sumColumns
+    ( ones
+    , sumColumns
     , sumRows
     ) where
 
 import           MLUtil.Imports
 
+ones :: Int -> Int -> Matrix R
+ones m n = konst 1.0 (m, n)
+
 sumColumns :: Matrix R -> Matrix R
-sumColumns m = konst 1.0 (1, rows m) <> m
+sumColumns m = ones 1 (rows m) <> m
 
 sumRows :: Matrix R -> Matrix R
-sumRows m = konst 1.0 (1, cols m) <> tr m
+sumRows m = ones 1 (cols m) <> tr m

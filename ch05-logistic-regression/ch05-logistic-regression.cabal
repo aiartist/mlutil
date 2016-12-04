@@ -20,6 +20,7 @@ library
   exposed-modules:            Ch05LogisticRegression.GradientAscent
                             , Ch05LogisticRegression.Util
   build-depends:              base
+                            , mlutil
 
 executable ch05-logistic-regression-app
   hs-source-dirs:             src
@@ -33,6 +34,7 @@ executable ch05-logistic-regression-app
                             , base
                             , ch05-logistic-regression
                             , mlutil
+                            , vector
 
 test-suite spec
   type:                       exitcode-stdio-1.0
@@ -40,9 +42,12 @@ test-suite spec
   default-language:           Haskell2010
   main-is:                    Spec.hs
   other-modules:              DataFiles
+                            , GradientAscentSpec
                             , Paths_ch05_logistic_regression
                             , Spec
                             , UtilSpec
   build-depends:              base
                             , ch05-logistic-regression
                             , hspec
+                            , mlutil
+                            , vector
