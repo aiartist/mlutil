@@ -1,4 +1,4 @@
-module SigmoidDemo (runSigmoidDemos) where
+module GradientAscentDemo (runGradientAscentDemos) where
 
 import           MLUtil.Graphics
 import           Graphics.Rendering.Chart.Easy
@@ -9,8 +9,8 @@ waveform f xs = [ (x, f x) | x <- xs ]
 sigmoid :: Double -> Double
 sigmoid x = 1.0 / (1.0 + exp (-x))
 
-runSigmoidDemos :: IO ()
-runSigmoidDemos = do
+createSigmoidFigures :: IO ()
+createSigmoidFigures = do
     renderChartSVG
         "sigmoid-fig5-1a.svg"
         defaultChartLabels
@@ -27,3 +27,8 @@ runSigmoidDemos = do
         , clYAxisLabel = Just "sigmoid(x)"
         }
         [ (line "sigmoid(x)" [ waveform sigmoid [ -60.0, -59.0 .. 60.0 ] ]) ]
+
+runGradientAscentDemos :: IO ()
+runGradientAscentDemos = do
+    --createSigmoidFigures
+    return ()

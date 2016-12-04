@@ -15,7 +15,8 @@ cabal-version:                >=1.10
 library
   hs-source-dirs:             lib
   default-language:           Haskell2010
-  exposed-modules:            Ch05LogisticRegression.Util
+  exposed-modules:            Ch05LogisticRegression.GradientAscent
+                            , Ch05LogisticRegression.Util
   build-depends:              base
 
 executable ch05-logistic-regression-app
@@ -23,8 +24,8 @@ executable ch05-logistic-regression-app
   main-is:                    Main.hs
   default-language:           Haskell2010
   other-modules:              DataFiles
+                            , GradientAscentDemo
                             , Paths_ch05_logistic_regression
-                            , SigmoidDemo
                             , UtilDemo
   build-depends:              Chart
                             , base

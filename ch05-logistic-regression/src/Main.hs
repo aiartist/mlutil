@@ -1,7 +1,7 @@
 module Main (main) where
 
-import           SigmoidDemo
+import           GradientAscentDemo
 import           UtilDemo
 
 main :: IO ()
-main = runUtilDemos >> runSigmoidDemos
+main = runUtilDemos >> runGradientAscentDemos
