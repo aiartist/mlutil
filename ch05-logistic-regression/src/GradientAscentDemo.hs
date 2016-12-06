@@ -22,7 +22,7 @@ createSigmoidFigures = do
         , clXAxisLabel = Just "x"
         , clYAxisLabel = Just "sigmoid(x)"
         }
-        [ mkRPlot (line "sigmoid(x)" [ waveform sigmoid [ -5.0, -4.9 .. 5.0 ] ]) ]
+        [ mkRPlot (line "sigmoid(x)" [waveform sigmoid [-5.0, -4.9 .. 5.0]]) ]
     renderChartSVG
         "sigmoid-fig5-1b.svg"
         defaultChartLabels
@@ -30,7 +30,7 @@ createSigmoidFigures = do
         , clXAxisLabel = Just "x"
         , clYAxisLabel = Just "sigmoid(x)"
         }
-        [ mkRPlot (line "sigmoid(x)" [ waveform sigmoid [ -60.0, -59.0 .. 60.0 ] ]) ]
+        [ mkRPlot (line "sigmoid(x)" [waveform sigmoid [-60.0, -59.0 .. 60.0]]) ]
 
 testGradAscent :: IO ()
 testGradAscent = do
