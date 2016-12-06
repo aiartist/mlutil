@@ -9,8 +9,8 @@ import qualified Data.Map as M
 import           Data.Vector.Storable as VS hiding (foldr, map)
 import qualified Data.Vector.Unboxed as VU
 import           Graphics.Rendering.Chart.Easy (points)
-import           MLUtil.Graphics.ScatterPlot
 import           MLUtil.Imports
+import           MLUtil.Graphics.RPlot
 import           MLUtil.LabelledMatrix
 
 type Coordinate = (R, R)
@@ -34,14 +34,14 @@ colouredSeriesPlotSpecs LabelledMatrix{..} xColumnIndex yColumnIndex =
             Just labelText = M.lookup labelId lmLabelMap
         in (labelText, subseries)
 
-colouredSeriesPlots :: LabelledMatrix -> Int -> Int -> [ScatterPlot]
+colouredSeriesPlots :: LabelledMatrix -> Int -> Int -> [RPlot]
 colouredSeriesPlots m xColumnIndex yColumnIndex = map
-    (uncurry points)
+    (mkRPlot . uncurry points)
     (colouredSeriesPlotSpecs m xColumnIndex yColumnIndex)
 
-simplePlot :: LabelledMatrix -> Int -> Int -> ScatterPlot
+simplePlot :: LabelledMatrix -> Int -> Int -> RPlot
 simplePlot LabelledMatrix{..} xColumnIndex yColumnIndex =
     let columns = toColumns lmValues
         xColumn = columns !! xColumnIndex
         yColumn = columns !! yColumnIndex
-    in points "Series" (zip (VS.toList xColumn) (VS.toList yColumn))
+    in mkRPlot $ points "Series" (zip (VS.toList xColumn) (VS.toList yColumn))

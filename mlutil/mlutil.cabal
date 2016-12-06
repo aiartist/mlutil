@@ -28,8 +28,8 @@ library
                             , MLUtil.Graphics.Flowchart
                             , MLUtil.Graphics.Imports
                             , MLUtil.Graphics.LabelledMatrixPlot
+                            , MLUtil.Graphics.RPlot
                             , MLUtil.Graphics.Rendering
-                            , MLUtil.Graphics.ScatterPlot
                             , MLUtil.IO
                             , MLUtil.Imports
                             , MLUtil.LabelledMatrix
