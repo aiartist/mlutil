@@ -21,6 +21,7 @@ library
                             , Ch05LogisticRegression.Util
   build-depends:              base
                             , mlutil
+                            , vector
 
 executable ch05-logistic-regression-app
   hs-source-dirs:             src
