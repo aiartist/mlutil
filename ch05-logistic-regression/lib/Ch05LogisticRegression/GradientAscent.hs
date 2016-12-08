@@ -5,6 +5,7 @@ module Ch05LogisticRegression.GradientAscent
     ) where
 
 import qualified Data.Vector.Storable as VS
+import           Debug.Trace
 import           MLUtil
 
 -- cf logRegres.sigmoid
@@ -29,6 +30,7 @@ gradAscent alpha maxCycles values labels =
 -- cf logRegres.stocGradAscent0
 -- This function demonstrates why we need to build a consistent set of
 -- primitives for linear algebra...
+-- TODO: Eliminate all the unnecessary conversions to and from lists etc.
 stocGradAscent0 :: Double -> Matrix R -> Matrix R -> Matrix R
 stocGradAscent0 alpha values labels =
     let m = rows values
@@ -36,14 +38,15 @@ stocGradAscent0 alpha values labels =
         rows' = toRows values -- Bad, bad, bad
     in col $ VS.toList (foldr -- VS.toList is bad, bad, bad
         (\i weights ->
-            let r = rows' !! i -- Bad, bad, bad
+            let rTemp = rows' !! i -- Bad, bad, bad
+                r = trace ("rTemp=" ++ show rTemp) rTemp
                 label = labels `atIndex` (i, 0)
                 h = sigmoid $ sumElements (mulElements r weights)
                 err = label - h
                 weightsDelta = scale (alpha * err) r
             in addElements weights weightsDelta)
         (VS.replicate n 1) -- initial weights
-        [0 .. m - 1])
+        [m - 1, m - 2 .. 0])
 
 mulElements :: VS.Vector R -> VS.Vector R -> VS.Vector R
 mulElements = VS.zipWith (*)

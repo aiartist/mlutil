@@ -68,7 +68,7 @@ testStocGradAscent = do
     Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
     let values = ones (rows lmValues) 1 ||| lmValues
         labels = col (map fromIntegral (VU.toList lmLabelIds))
-        r = stocGradAscent0 0.001 values labels
+        r = stocGradAscent0 0.01 values labels
     print r
 
 runGradientAscentDemos :: IO ()
