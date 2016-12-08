@@ -47,6 +47,21 @@ createSigmoidFigures = do
         }
         plots
 
+    Just m@LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
+    let values = ones (rows lmValues) 1 ||| lmValues
+        labels = col (map fromIntegral (VU.toList lmLabelIds))
+        r = stocGradAscent0 0.01 values labels
+        plots = (mkRPlot $ line "best-fit line" [waveform (bestFitLine r) [-3.0, -2.9 .. 3.0]])
+                    : (colouredSeriesPlots m 0 1)
+    renderChartSVG
+        "sigmoid-fig5-5.svg"
+        defaultChartLabels
+        { clTitle = Just "Figure 5.5: Stochastic gradient ascent best-fit line"
+        , clXAxisLabel = Just "x"
+        , clYAxisLabel = Just "sigmoid(x)"
+        }
+        plots
+
 -- cf logRegres.plotBestFit
 bestFitLine :: Matrix R -> Double -> Double
 bestFitLine weights x =

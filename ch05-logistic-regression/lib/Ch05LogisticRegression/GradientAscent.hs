@@ -5,7 +5,6 @@ module Ch05LogisticRegression.GradientAscent
     ) where
 
 import qualified Data.Vector.Storable as VS
-import           Debug.Trace
 import           MLUtil
 
 -- cf logRegres.sigmoid
@@ -38,8 +37,7 @@ stocGradAscent0 alpha values labels =
         rows' = toRows values -- Bad, bad, bad
     in col $ VS.toList (foldr -- VS.toList is bad, bad, bad
         (\i weights ->
-            let rTemp = rows' !! i -- Bad, bad, bad
-                r = trace ("rTemp=" ++ show rTemp) rTemp
+            let r = rows' !! i -- Bad, bad, bad
                 label = labels `atIndex` (i, 0)
                 h = sigmoid $ sumElements (mulElements r weights)
                 err = label - h
