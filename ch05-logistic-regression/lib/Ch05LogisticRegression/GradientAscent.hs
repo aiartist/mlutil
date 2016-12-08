@@ -23,3 +23,18 @@ gradAscent alpha maxCycles values labels =
             in weights + weightsDelta)
         (ones n 1) -- initial weights
         [0 .. maxCycles - 1]
+
+-- cf logRegres.stocGradAscent0
+stocGradAscent0 :: Double -> Matrix R -> Matrix R -> Matrix R
+stocGradAscent0 alpha values labels =
+    let m = rows values
+        n = cols values
+    in foldr
+        (\i weights ->
+            let row = values
+                h = sigmoid $ sumElements (row <> weights)
+                err = label - h
+                weightsDelta = scale (alpha * err) row
+            in weights + weightsDelta)
+        (ones n 1) -- initial weights
+        [0 .. m - 1]
