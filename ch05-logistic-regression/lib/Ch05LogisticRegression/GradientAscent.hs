@@ -2,6 +2,7 @@ module Ch05LogisticRegression.GradientAscent
     ( gradAscent
     , sigmoid
     , stocGradAscent0
+    , stocGradAscent0Weights
     ) where
 
 import qualified Data.Vector.Storable as VS
@@ -45,6 +46,23 @@ stocGradAscent0 alpha values labels =
             in addElements weights weightsDelta)
         (VS.replicate n 1) -- initial weights
         [m - 1, m - 2 .. 0])
+
+-- stocGradAscent0 modified to allow us to track values of weights
+stocGradAscent0Weights :: Double -> VS.Vector R -> Matrix R -> Matrix R -> VS.Vector R
+stocGradAscent0Weights alpha initWeights values labels =
+    let m = rows values
+        n = cols values
+        rows' = toRows values -- Bad, bad, bad
+    in foldr -- VS.toList is bad, bad, bad
+        (\i weights ->
+            let r = rows' !! i -- Bad, bad, bad
+                label = labels `atIndex` (i, 0)
+                h = sigmoid $ sumElements (mulElements r weights)
+                err = label - h
+                weightsDelta = scale (alpha * err) r
+            in addElements weights weightsDelta)
+        initWeights
+        [m - 1, m - 2 .. 0]
 
 mulElements :: VS.Vector R -> VS.Vector R -> VS.Vector R
 mulElements = VS.zipWith (*)

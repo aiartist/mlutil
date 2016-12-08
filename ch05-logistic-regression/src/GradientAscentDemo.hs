@@ -4,6 +4,7 @@ module GradientAscentDemo (runGradientAscentDemos) where
 
 import           Ch05LogisticRegression.GradientAscent
 import           DataFiles
+import qualified Data.Vector.Storable as VS
 import qualified Data.Vector.Unboxed as VU
 import           MLUtil
 import           MLUtil ((|||))
@@ -61,6 +62,33 @@ createSigmoidFigures = do
         , clYAxisLabel = Just "sigmoid(x)"
         }
         plots
+
+    -- Iterate 20000 times
+    -- Lots of inefficient conversion back and forth between lists, vectors and matrices here...
+    -- The chart looks nothing like the one in the book
+    -- I have contacted the author about this
+    let (weightsVsIterations, w) = foldr
+                                (\_ (ws, weights) ->
+                                    let w = stocGradAscent0Weights 0.01 weights values labels
+                                        l = VS.toList w
+                                    in (l : ws, w))
+                                ([], VS.replicate (rows values) 1)
+                                [0 .. 19999]
+        weightsMatrix = fromLists weightsVsIterations
+        weightsColumns = map VS.toList $ toColumns weightsMatrix
+        plots = map
+                    (\i -> mkRPlot $ line ("x" ++ show i) [(zip (map fromIntegral [0 ..]) (weightsColumns !! i))])
+                    [0 .. 2]
+    renderChartSVG
+        "sigmoid-fig5-6.svg"
+        defaultChartLabels
+        { clTitle = Just "Figure 5.6: Weights vs. iteration number"
+        , clXAxisLabel = Just "Iteration"
+        , clYAxisLabel = Just "x0"
+        }
+        plots
+
+    print w
 
 -- cf logRegres.plotBestFit
 bestFitLine :: Matrix R -> Double -> Double
