@@ -60,7 +60,7 @@ createSigmoidFigures = do
         defaultChartLabels
         { clTitle = Just "Figure 5.5: Stochastic gradient ascent best-fit line"
         , clXAxisLabel = Just "x"
-        , clYAxisLabel = Just "sigmoid(x)"
+        , clYAxisLabel = Just "y"
         }
         plots
 
@@ -76,6 +76,24 @@ createSigmoidFigures = do
         { clTitle = Just "Figure 5.6: Weights vs. iteration number"
         , clXAxisLabel = Just "Iteration"
         , clYAxisLabel = Just "Weights"
+        }
+        plots
+
+    let values = ones (rows lmValues) 1 ||| lmValues
+        labels = col (map fromIntegral (VU.toList lmLabelIds))
+        rowCount = rows values
+        Just eiAction = choiceExtractIndices rowCount rowCount
+        numIter = 150
+    eis <- foldM (\eis _ -> eiAction >>= \ei -> return $ ei : eis) [] [1 .. numIter]
+    let r = stocGradAscent1 0.01 values labels eis
+        plots = (mkRPlot $ line "best-fit line" [waveform (bestFitLine r) [-3.0, -2.9 .. 3.0]])
+                    : (colouredSeriesPlots m 0 1)
+    renderChartSVG
+        "sigmoid-fig5-8.svg"
+        defaultChartLabels
+        { clTitle = Just "Figure 5.8: Improved stochastic gradient ascent best-fit line"
+        , clXAxisLabel = Just "x"
+        , clYAxisLabel = Just "y"
         }
         plots
 
@@ -106,11 +124,11 @@ testStocGradAscent = do
         numIter = 150
     eis <- foldM (\eis _ -> eiAction >>= \ei -> return $ ei : eis) [] [1 .. numIter]
     let r1 = stocGradAscent1 0.01 values labels eis
-    --print r0
+    print r0
     print r1
 
 runGradientAscentDemos :: IO ()
 runGradientAscentDemos = do
-    --createSigmoidFigures
-    --testGradAscent
+    createSigmoidFigures
+    testGradAscent
     testStocGradAscent
