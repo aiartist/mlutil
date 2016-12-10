@@ -63,32 +63,20 @@ createSigmoidFigures = do
         }
         plots
 
-    -- Iterate 20000 times
-    -- Lots of inefficient conversion back and forth between lists, vectors and matrices here...
-    -- The chart looks nothing like the one in the book
-    -- I have contacted the author about this
-    let (weightsVsIterations, w) = foldr
-                                (\_ (ws, weights) ->
-                                    let w = stocGradAscent0Weights 0.01 weights values labels
-                                        l = VS.toList w
-                                    in (l : ws, w))
-                                ([], VS.replicate (rows values) 1)
-                                [0 .. 19999]
-        weightsMatrix = fromLists weightsVsIterations
-        weightsColumns = map VS.toList $ toColumns weightsMatrix
-        plots = map
-                    (\i -> mkRPlot $ line ("x" ++ show i) [(zip (map fromIntegral [0 ..]) (weightsColumns !! i))])
-                    [0 .. 2]
+    -- The performance-related failings of my implementation become apparent
+    -- when trying to record the history: running to 500 iterations like Peter's
+    -- sample is not really viable!
+    -- TODO: Optimize!
+    let (_, history) = stocGradAscent0History 0.01 50 values labels
+        plots = map (\i -> mkRPlot $ line ("x" ++ show i) [zip (map fromIntegral [0 ..]) (map (`atIndex` i) history)]) [0 .. 2]
     renderChartSVG
         "sigmoid-fig5-6.svg"
         defaultChartLabels
         { clTitle = Just "Figure 5.6: Weights vs. iteration number"
         , clXAxisLabel = Just "Iteration"
-        , clYAxisLabel = Just "x0"
+        , clYAxisLabel = Just "Weights"
         }
         plots
-
-    print w
 
 -- cf logRegres.plotBestFit
 bestFitLine :: Matrix R -> Double -> Double
