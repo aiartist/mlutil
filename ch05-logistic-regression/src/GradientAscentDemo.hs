@@ -127,8 +127,44 @@ testStocGradAscent = do
     print r0
     print r1
 
+-- cf logRegres.colicTest
+-- I'm bored of this now
+-- This function doesn't work
+colicTest :: IO ()
+colicTest = do
+    Just trainingM <- getDataFileName "horseColicTraining.txt" >>= readLabelledMatrix
+    let trainingValues = lmValues trainingM
+        trainingLabels = col (map fromIntegral (VU.toList (lmLabelIds trainingM)))
+        trainingRowCount = rows trainingValues
+        Just eiAction = choiceExtractIndices trainingRowCount trainingRowCount
+    eis <- foldM (\eis _ -> eiAction >>= \ei -> return $ ei : eis) [] [1 .. 500]
+    let weights = flatten $ stocGradAscent1 0.01 trainingValues trainingLabels eis
+
+    Just testM <- getDataFileName "horseColicTest.txt" >>= readLabelledMatrix
+    let testValues = lmValues testM
+        testLabels = VU.toList (lmLabelIds testM)
+        testRows = toRows testValues
+        (n, err) = foldr
+                    (\(testRow, testLabel) (n, err) ->
+                        let r = classifyVector testRow weights;
+                            err' = if r == testLabel then err else err + 1
+                        in (n + 1, err'))
+                    (0, 0)
+                    (zip testRows testLabels)
+        errorRate = (fromIntegral err) / (fromIntegral n)
+    putStrLn $ "errorRate=" ++ show errorRate
+
+-- cf logRegres.classifyVector
+classifyVector :: VS.Vector R -> VS.Vector R -> Int
+classifyVector inX weights =
+    let prob = sigmoid (sumElements (mulElements inX weights))
+    in if prob > 0.5
+        then 1
+        else 0
+
 runGradientAscentDemos :: IO ()
 runGradientAscentDemos = do
     createSigmoidFigures
     testGradAscent
     testStocGradAscent
+    colicTest

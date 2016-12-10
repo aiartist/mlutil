@@ -1,5 +1,7 @@
 module Ch05LogisticRegression.GradientAscent
-    ( gradAscent
+    ( addElements
+    , gradAscent
+    , mulElements
     , sigmoid
     , stocGradAscent0
     , stocGradAscent0History
