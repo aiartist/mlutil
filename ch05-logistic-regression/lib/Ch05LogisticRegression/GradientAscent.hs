@@ -7,7 +7,6 @@ module Ch05LogisticRegression.GradientAscent
     ) where
 
 import qualified Data.Vector.Storable as VS
-import           Debug.Trace
 import           MLUtil
 
 -- cf logRegres.sigmoid

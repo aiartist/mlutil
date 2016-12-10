@@ -2,6 +2,7 @@ module MLUtil.Random
     ( ExtractIndices (eiC, eiIs, eiN)
     , choiceExtract
     , choiceExtractIndices
+    , choiceExtractIndices'
     , extract
     , isValidExtractIndices
     , mkExtractIndices
@@ -54,6 +55,7 @@ extract ei values = helper (eiN ei) (eiIs ei) values
                 in Just (residual', reverse xs')
 
 -- |Random choice of c elements from n
+-- TODO: Rename to choiceExtractIndicesIO
 choiceExtractIndices :: Int -> Int -> Maybe (IO ExtractIndices)
 choiceExtractIndices c n
     | c < 0 || n < 0 || c > n = Nothing
@@ -61,6 +63,20 @@ choiceExtractIndices c n
     | otherwise = Just $ do
         is <- foldM (\xs i -> randomRIO (0, i) >>= \x -> return $ x : xs) [] [0 .. c - 1]
         return $ ExtractIndices c n is
+
+-- |Random choice of c elements from n
+-- TODO: Rename to choiceExtractIndices
+-- TODO: Consolidate with choiceExtractIndices
+choiceExtractIndices' :: RandomGen g => g -> Int -> Int -> Maybe (ExtractIndices, g)
+choiceExtractIndices' g c n
+    | c < 0 || n < 0 || c > n = Nothing
+    | c == 0 = Just (ExtractIndices c n [], g)
+    | otherwise =
+        let (is, g') = foldl
+                (\(xs, g) i -> let (x, g') = randomR (0, i) g in (x : xs, g'))
+                ([], g)
+                [0 .. c - 1]
+        in Just (ExtractIndices c n is, g')
 
 -- |Removes and returns n random elements from list
 choiceExtract :: Int -> [a] -> IO (Maybe ([a], [a]))

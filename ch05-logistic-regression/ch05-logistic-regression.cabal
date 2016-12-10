@@ -51,4 +51,5 @@ test-suite spec
                             , ch05-logistic-regression
                             , hspec
                             , mlutil
+                            , random
                             , vector
