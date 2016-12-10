@@ -3,9 +3,11 @@ module Ch05LogisticRegression.GradientAscent
     , sigmoid
     , stocGradAscent0
     , stocGradAscent0History
+    , stocGradAscent1
     ) where
 
 import qualified Data.Vector.Storable as VS
+import           Debug.Trace
 import           MLUtil
 
 -- cf logRegres.sigmoid
@@ -70,6 +72,31 @@ helper alpha p values labels =
             in (weights', history ++ [weights'])) -- TODO: Tweak fold since concatenation is O(N) I think
         p
         [0 .. m - 1]
+
+stocGradAscent1 :: Double -> Matrix R -> Matrix R -> [ExtractIndices] -> Matrix R
+stocGradAscent1 alpha values labels eis =
+    let m = rows values
+        n = cols values
+        rows' = toRows values -- Bad, bad, bad
+        labels' = map (\i -> labels `atIndex` (i, 0)) [0 .. m - 1]
+    in col $ VS.toList -- VS.toList is bad, bad, bad
+        (foldl
+            (\w (j, ei) -> stocGradAscent1Helper rows' labels' j ei w)
+            (VS.replicate n 1)
+            (zip [0 ..] eis))
+
+stocGradAscent1Helper :: [VS.Vector R] -> [R] -> Int -> ExtractIndices -> VS.Vector R -> VS.Vector R
+stocGradAscent1Helper rows'' labels'' j ei weights =
+    let Just (_, rows') = extract ei (zip rows'' labels'')
+    in foldl
+    (\weights (i, (r, label)) ->
+        let alpha = 4.0 / (1.0 + fromIntegral (j + i)) + 0.0001
+            h = sigmoid $ sumElements (mulElements r weights)
+            err = label - h
+            weightsDelta = scale (alpha * err) r
+        in addElements weights weightsDelta)
+    weights
+    (zip [0 ..] rows')
 
 mulElements :: VS.Vector R -> VS.Vector R -> VS.Vector R
 mulElements = VS.zipWith (*)

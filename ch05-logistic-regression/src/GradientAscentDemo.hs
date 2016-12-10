@@ -3,6 +3,7 @@
 module GradientAscentDemo (runGradientAscentDemos) where
 
 import           Ch05LogisticRegression.GradientAscent
+import           Control.Monad
 import           DataFiles
 import qualified Data.Vector.Storable as VS
 import qualified Data.Vector.Unboxed as VU
@@ -99,11 +100,17 @@ testStocGradAscent = do
     Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
     let values = ones (rows lmValues) 1 ||| lmValues
         labels = col (map fromIntegral (VU.toList lmLabelIds))
-        r = stocGradAscent0 0.01 values labels
-    print r
+        r0 = stocGradAscent0 0.01 values labels
+        rowCount = rows values
+        Just eiAction = choiceExtractIndices rowCount rowCount
+        numIter = 150
+    eis <- foldM (\eis _ -> eiAction >>= \ei -> return $ ei : eis) [] [1 .. numIter]
+    let r1 = stocGradAscent1 0.01 values labels eis
+    --print r0
+    print r1
 
 runGradientAscentDemos :: IO ()
 runGradientAscentDemos = do
-    createSigmoidFigures
-    testGradAscent
+    --createSigmoidFigures
+    --testGradAscent
     testStocGradAscent
