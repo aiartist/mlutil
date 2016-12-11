@@ -1,4 +1,4 @@
-module EasySpec
+module STSpec
     ( main
     , spec
     ) where
@@ -8,22 +8,6 @@ import           Test.Hspec
 
 spec :: Spec
 spec = do
-    describe "basics" $ do
-        it "does the expected thing" $ do
-            let m = (2 >< 3) [0..]
-                x = 3 |> [0..]
-                y = m #> x
-                x' = asColumn x
-                y' = m <> x'
-                y'' = x <# (3 >< 2) [0..]
-                a = ones 2 :: Vector
-            print y
-            print y'
-            print y''
-            print a
-            print $ (ones (3, 2) :: Matrix)
-            print $ (zeros (5, 7) :: Matrix)
-
     describe "withSTMatrix" $ do
         it "should create expected matrix" $ do
             let m = withSTMatrix 9 3 3 $ \m -> do
