@@ -19,6 +19,7 @@ module Numeric.LinearAlgebra.Easy.Basics
     , asColumn
     , asRow
     , atIndex
+    , ident
     , matrix
     , vector
     ) where
@@ -26,7 +27,7 @@ module Numeric.LinearAlgebra.Easy.Basics
 import qualified Numeric.LinearAlgebra as LA
 import           Numeric.LinearAlgebra.Easy.Types
 
--- |Create a vector of doubles from a list of elements and explicit dimension.
+-- |Creates a vector of doubles from a list of elements and explicit dimension.
 -- The input list is truncated if it is too long, so it may safely be used, for
 -- instance, with infinite lists.
 --
@@ -37,7 +38,7 @@ import           Numeric.LinearAlgebra.Easy.Types
 infixl 9 |>
 (|>) = (LA.|>)
 
--- |Create a vector of doubles
+-- |Creates a vector of doubles
 --
 -- >>> vector [1..5]
 -- [1.0,2.0,3.0,4.0,5.0]
@@ -45,7 +46,7 @@ infixl 9 |>
 vector :: [R] -> Vector
 vector = LA.vector
 
--- |Create a matrix of doubles from a list of elements
+-- |Creates a matrix of doubles from a list of elements
 --
 -- >>> (2 >< 3) [2, 4, 7, -3, 11, 0]
 -- (2><3)
@@ -66,8 +67,7 @@ vector = LA.vector
 (><) :: Int -> Int -> [R] -> Matrix
 (><) = (LA.><)
 
-
--- |Create a matrix of doubles
+-- |Creates a matrix of doubles
 --
 -- >>> matrix 5 [1..15]
 -- (3><5)
@@ -177,3 +177,15 @@ asColumn = LA.asColumn
 --
 atIndex :: LA.Container c R => c R -> LA.IndexOf c -> R
 atIndex = LA.atIndex
+
+-- |Creates the identity matrix of doubles of given dimension
+--
+-- >>> m = ident 3
+-- >>> m
+-- (3><3)
+--  [ 1.0, 0.0, 0.0
+--  , 0.0, 1.0, 0.0
+--  , 0.0, 0.0, 1.0 ]
+--
+ident :: Int -> Matrix
+ident = LA.ident

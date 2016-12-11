@@ -32,7 +32,8 @@ test-suite spec
   hs-source-dirs:             spec
   default-language:           Haskell2010
   main-is:                    Spec.hs
-  other-modules:              STSpec
+  other-modules:              EasySpec
+                            , STSpec
   build-depends:              base
                             , easyla
                             , hspec
