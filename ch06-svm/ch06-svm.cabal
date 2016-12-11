@@ -1,0 +1,41 @@
+name:                         ch06-svm
+version:                      0.1.0.0
+synopsis:                     Machine Learning in Action: support vector machines
+description:                  Please see README.md
+homepage:                     https://github.com/rcook/mlutil#readme
+license:                      MIT
+license-file:                 LICENSE
+author:                       Richard Cook
+maintainer:                   rcook@rcook.org
+copyright:                    2016 Richard Cook
+category:                     Web
+build-type:                   Simple
+cabal-version:                >=1.10
+
+library
+  hs-source-dirs:             lib
+  default-language:           Haskell2010
+  exposed-modules:            Ch06SVM.Util
+  build-depends:              base
+
+executable ch06-svm-app
+  hs-source-dirs:             src
+  main-is:                    Main.hs
+  default-language:           Haskell2010
+  other-modules:              DataFiles
+                            , Paths_ch06_svm
+                            , UtilDemo
+  build-depends:              base
+
+test-suite spec
+  type:                       exitcode-stdio-1.0
+  hs-source-dirs:             spec
+  default-language:           Haskell2010
+  main-is:                    Spec.hs
+  other-modules:              DataFiles
+                            , Paths_ch06_svm
+                            , Spec
+                            , UtilSpec
+  build-depends:              base
+                            , ch06-svm
+                            , hspec

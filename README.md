@@ -21,6 +21,7 @@ The last point includes refactoring much of the code where I have taken lazy app
 * [Programs from chapter 3 of book: decision trees][ch03decisiontrees]
 * [Programs from chapter 4 of book: na&iuml;ve Bayes][ch04naivebayes]
 * [Programs from chapter 5 of book: logistic regression][ch05logisticregression]
+* [Programs from chapter 6 of book: support vector machines][ch06svm]
 
 ## Supported platforms
 
@@ -62,6 +63,7 @@ The `test` script works in a similar manner. I'll write similar companion script
 [ch03decisiontrees]: ch03-decision-trees/README.md
 [ch04naivebayes]: ch04-naive-bayes/README.md
 [ch05logisticregression]: ch05-logistic-regression/README.md
+[ch06svm]: ch06-svm/README.md
 [cleancmd]: clean.cmd
 [cleanscript]: clean
 [dh]: https://github.com/datahaskell
