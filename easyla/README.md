@@ -10,6 +10,7 @@ Simplified monomorphic bindings to [`hmatrix`][hmatrix] and various linear algeb
 * Specialize to `Double`
 * Simplify some common operations by providing helper functions
 * Export all the most commonly used bits via a single namespace to enable use of a single `import` for common usages
+* Make interface as similar as possible to existing `hmatrix` interface to aid transition back and forth between the two
 
 # Install prerequisites
 

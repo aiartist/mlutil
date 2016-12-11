@@ -8,6 +8,8 @@ Stability   : experimental
 Portability : portable
 -}
 
+{-# LANGUAGE FlexibleContexts #-}
+
 module Numeric.LinearAlgebra.Easy.Basics
     ( (|>)
     , (><)
@@ -16,6 +18,7 @@ module Numeric.LinearAlgebra.Easy.Basics
     , (<#)
     , asColumn
     , asRow
+    , atIndex
     ) where
 
 import qualified Numeric.LinearAlgebra as LA
@@ -54,3 +57,14 @@ asRow = LA.asRow
 -- |Creates a 1-column matrix from a vector
 asColumn :: Vector -> Matrix
 asColumn = LA.asColumn
+
+-- | generic indexing function
+--
+-- >>> vector [1,2,3] `atIndex` 1
+-- 2.0
+--
+-- >>> matrix 3 [0..8] `atIndex` (2,0)
+-- 6.0
+--
+atIndex :: LA.Container c R => c R -> LA.IndexOf c -> R
+atIndex = LA.atIndex

@@ -18,6 +18,8 @@ module Numeric.LinearAlgebra.Easy.Types
     , R
     , Vector
     , Zeros
+    , ones
+    , zeros
     ) where
 
 import qualified Numeric.LinearAlgebra as LA
