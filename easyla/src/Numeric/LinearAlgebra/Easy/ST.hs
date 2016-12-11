@@ -30,6 +30,19 @@ newMatrix = LAD.newMatrix
 runSTMatrix :: (forall s . ST s (STMatrix s)) -> Matrix
 runSTMatrix = LAD.runSTMatrix
 
+-- |Wraps building a matrix of doubles in ST monad
+--
+-- >>> :{
+-- withSTMatrix 9 3 3 $ \m' -> do
+--     writeMatrix m' 0 0 10.0
+--     writeMatrix m' 1 1 20.0
+--     writeMatrix m' 2 2 30.0
+-- :}
+-- (3><3)
+--  [ 10.0,  9.0,  9.0
+--  ,  9.0, 20.0,  9.0
+--  ,  9.0,  9.0, 30.0 ]
+--
 withSTMatrix :: R -> Int -> Int -> (forall s . STMatrix s -> ST s ()) -> Matrix
 withSTMatrix value m n f = runSTMatrix $ do
     x <- newMatrix value m n
