@@ -12,7 +12,9 @@ Portability : portable
 
 module Numeric.LinearAlgebra.Easy.ST
     ( STMatrix
+    , modifyMatrix
     , newMatrix
+    , readMatrix
     , runSTMatrix
     , withSTMatrix
     , writeMatrix
@@ -24,13 +26,15 @@ import           Numeric.LinearAlgebra.Easy.Types
 
 type STMatrix s = LAD.STMatrix s R
 
+-- |Creates a new mutable matrix of doubles
 newMatrix :: R -> Int -> Int -> ST s (STMatrix s)
 newMatrix = LAD.newMatrix
 
+-- |Safely freezes converts a mutable matrix of doubles
 runSTMatrix :: (forall s . ST s (STMatrix s)) -> Matrix
 runSTMatrix = LAD.runSTMatrix
 
--- |Wraps building a matrix of doubles in ST monad
+-- |Wraps operations on a mutable matrix of doubles
 --
 -- >>> :{
 -- withSTMatrix 9 3 3 $ \m' -> do
@@ -49,5 +53,14 @@ withSTMatrix value m n f = runSTMatrix $ do
     f x
     return x
 
+-- |Applies a function to a value in a mutable matrix of doubles
+modifyMatrix :: STMatrix s -> Int -> Int -> (R -> R) -> ST s ()
+modifyMatrix = LAD.modifyMatrix
+
+-- |Reads a value from a mutable matrix of doubles
+readMatrix :: STMatrix s -> Int -> Int -> ST s R
+readMatrix = LAD.readMatrix
+
+-- |Writes a value to a mutable matrix of doubles
 writeMatrix :: STMatrix s -> Int -> Int -> R -> ST s ()
 writeMatrix = LAD.writeMatrix
