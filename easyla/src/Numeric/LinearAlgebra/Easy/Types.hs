@@ -6,6 +6,10 @@ Licence     : MIT
 Maintainer  : rcook@rcook.org
 Stability   : experimental
 Portability : portable
+
+Commonly used types and type aliases
+
+Typical usage is to import the top-level module unqualified using @import Numeric.LinearAlgebra.Easy@
 -}
 
 {-# LANGUAGE FlexibleInstances #-}
@@ -24,14 +28,27 @@ module Numeric.LinearAlgebra.Easy.Types
 
 import qualified Numeric.LinearAlgebra as LA
 
+-- |Two-dimensional matrix of @Double@ values
 type Matrix = LA.Matrix R
+
+-- |@Double@ numeric data type
 type R = LA.R
+
+-- |Row or column vector of @Double@ values
 type Vector = LA.Vector R
 
-class Ones d c | c -> d where ones :: d -> c
+-- |Types that define an all-ones instance
+class Ones d c | c -> d where
+    -- |All-ones instance of size @d@
+    ones :: d -> c
+
 instance Ones Int Vector where ones = LA.konst 1
 instance Ones (Int, Int) Matrix where ones = LA.konst 1
 
-class Zeros d c | c -> d where zeros :: d -> c
+-- |Types that define an all-zeroes instance
+class Zeros d c | c -> d where
+    -- |All-zeroes instance of size @d@
+    zeros :: d -> c
+
 instance Zeros Int Vector where zeros = LA.konst 0
 instance Zeros (Int, Int) Matrix where zeros = LA.konst 0
