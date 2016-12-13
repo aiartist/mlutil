@@ -6,6 +6,8 @@ Licence     : MIT
 Maintainer  : rcook@rcook.org
 Stability   : experimental
 Portability : portable
+
+Typical usage is to import the top-level module using @import Numeric.LinearAlgebra.Easy@ unqualified
 -}
 
 {-# LANGUAGE Rank2Types #-}

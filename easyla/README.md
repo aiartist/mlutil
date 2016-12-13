@@ -1,14 +1,14 @@
 # `easyla`
 
-Simplified monomorphic bindings to [`hmatrix`][hmatrix] and various linear algebra helpers
+Simplified monomorphic bindings to [`hmatrix`][hmatrix] and other linear algebra helpers
 
 # Motivation
 
-`hmatrix` is great. However, the fact that everything is polymorphic makes it more difficult to use than is necessary if all you ever use is `Double`. So, this little package wraps up `hmatrix` (and bits of [`vector`][vector]). Here are the design goals:
+`hmatrix` is great. However, the fact that everything is polymorphic makes it more difficult to use than is necessary if all you ever use is `Double`. So, this little package wraps `hmatrix` (and bits of [`vector`][vector]). Here are the design goals:
 
 * Export simplified monomorphic versions of functions
 * Specialize to `Double`
-* Simplify some common operations by providing helper functions
+* Simplify common operations by providing helper functions
 * Export all the most commonly used bits via a single namespace to enable use of a single `import` for common usages
 * Make interface as similar as possible to existing `hmatrix` interface to aid transition back and forth between the two
 
