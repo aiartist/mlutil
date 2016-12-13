@@ -23,7 +23,7 @@ a single @import@ for common usages
 * Make interface as similar as possible to existing `hmatrix` interface to aid
 transition back and forth between the two
 
-Typical usage is to import the top-level module using @import Numeric.LinearAlgebra.Easy@ unqualified
+Typical usage is to import the top-level module unqualified using @import Numeric.LinearAlgebra.Easy@
 -}
 
 module Numeric.LinearAlgebra.Easy
