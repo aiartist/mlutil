@@ -7,6 +7,8 @@ Maintainer  : rcook@rcook.org
 Stability   : experimental
 Portability : portable
 
+Mutable matrices of @Double@ in the @ST@ monads
+
 Typical usage is to import the top-level module unqualified using @import Numeric.LinearAlgebra.Easy@
 -}
 
@@ -26,17 +28,18 @@ import           Control.Monad.ST
 import qualified Numeric.LinearAlgebra.Devel as LAD
 import           Numeric.LinearAlgebra.Easy.Types
 
+-- |A mutable matrix of @Double@ values
 type STMatrix s = LAD.STMatrix s R
 
--- |Creates a new mutable matrix of doubles
+-- |Creates a new mutable matrix of @Double@ values
 newMatrix :: R -> Int -> Int -> ST s (STMatrix s)
 newMatrix = LAD.newMatrix
 
--- |Safely freezes converts a mutable matrix of doubles
+-- |Safely freezes and converts a mutable matrix of @Double@ values
 runSTMatrix :: (forall s . ST s (STMatrix s)) -> Matrix
 runSTMatrix = LAD.runSTMatrix
 
--- |Wraps operations on a mutable matrix of doubles
+-- |Wraps operations on a mutable matrix of @Double@ values
 --
 -- >>> :{
 -- withSTMatrix 9 3 3 $ \m' -> do
@@ -55,14 +58,14 @@ withSTMatrix value m n f = runSTMatrix $ do
     f x
     return x
 
--- |Applies a function to a value in a mutable matrix of doubles
+-- |Applies a function to a value in a mutable matrix of @Double@ values
 modifyMatrix :: STMatrix s -> Int -> Int -> (R -> R) -> ST s ()
 modifyMatrix = LAD.modifyMatrix
 
--- |Reads a value from a mutable matrix of doubles
+-- |Reads a value from a mutable matrix of @Double@ values
 readMatrix :: STMatrix s -> Int -> Int -> ST s R
 readMatrix = LAD.readMatrix
 
--- |Writes a value to a mutable matrix of doubles
+-- |Writes a value to a mutable matrix of @Double@ values
 writeMatrix :: STMatrix s -> Int -> Int -> R -> ST s ()
 writeMatrix = LAD.writeMatrix
