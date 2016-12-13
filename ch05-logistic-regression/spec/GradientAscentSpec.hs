@@ -18,7 +18,7 @@ spec = do
     describe "gradAscent" $ do
         it "computes correct weights" $ do
             Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-            let values = ones (rows lmValues) 1 ||| lmValues
+            let values = ones (rows lmValues, 1) ||| lmValues
                 labels = col (map fromIntegral (VU.toList lmLabelIds))
                 weights = toLists $ gradAscent 0.001 500 values labels
             length weights `shouldBe` 3
@@ -30,7 +30,7 @@ spec = do
     describe "stocGradAscent0" $ do
         it "computes correct weights" $ do
             Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-            let values = ones (rows lmValues) 1 ||| lmValues
+            let values = ones (rows lmValues, 1) ||| lmValues
                 labels = col (map fromIntegral (VU.toList lmLabelIds))
                 weights = toLists $ stocGradAscent0 0.01 values labels
             length weights `shouldBe` 3
@@ -42,7 +42,7 @@ spec = do
     describe "stocGradAscent1" $ do
         it "computes correct weights" $ do
             Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-            let values = ones (rows lmValues) 1 ||| lmValues
+            let values = ones (rows lmValues, 1) ||| lmValues
                 labels = col (map fromIntegral (VU.toList lmLabelIds))
                 rowCount = rows lmValues
                 g = mkStdGen 0

@@ -16,12 +16,11 @@ import qualified Data.Vector.Unboxed as VU
 import qualified Data.Vector.Unboxed.Mutable as VUM
 import           MLUtil.Imports
 import           MLUtil.Util
-import           Numeric.LinearAlgebra.Devel
 
 type LabelId = Int
 
 data LabelledMatrix = LabelledMatrix
-    { lmValues :: Matrix R
+    { lmValues :: Matrix
     , lmLabelIds :: VU.Vector LabelId
     , lmLabelIdMap :: M.Map String LabelId
     , lmLabelMap :: M.Map LabelId String

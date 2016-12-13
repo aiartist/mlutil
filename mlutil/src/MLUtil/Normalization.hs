@@ -12,18 +12,18 @@ import           MLUtil.Folding
 import           MLUtil.Imports
 
 data ColumnNormalization = ColumnNormalization
-    { cnValues :: Vector R
+    { cnValues :: Vector
     , cnRange :: R
     , cnMin :: R
     } deriving (Eq, Show)
 
 data MatrixNormalization = MatrixNormalization
-    { mnValues :: Matrix R
+    { mnValues :: Matrix
     , mnRanges :: [R]
     , mnMins :: [R]
     } deriving Show
 
-normalizeColumn :: Matrix R -> Int -> ColumnNormalization
+normalizeColumn :: Matrix -> Int -> ColumnNormalization
 normalizeColumn m c =
     let initialMinMax = columnHead m c
         (xMin, xMax) = foldColumn (\x (xMin, xMax) -> (min x xMin, max x xMax)) (initialMinMax, initialMinMax) m c
@@ -34,7 +34,7 @@ normalizeColumn m c =
         xMin
 
 -- cf kNN.autoNorm
-normalizeMatrixColumns :: Matrix R -> MatrixNormalization
+normalizeMatrixColumns :: Matrix -> MatrixNormalization
 normalizeMatrixColumns m =
     let (columns, ranges, mins) = foldr
             (\c (columns, ranges, mins) -> let ColumnNormalization{..} = normalizeColumn m c in (cnValues : columns, cnRange : ranges, cnMin : mins))

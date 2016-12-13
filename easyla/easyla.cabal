@@ -21,6 +21,7 @@ library
   default-language:           Haskell2010
   exposed-modules:            Numeric.LinearAlgebra.Easy
                             , Numeric.LinearAlgebra.Easy.Basics
+                            , Numeric.LinearAlgebra.Easy.Devel
                             , Numeric.LinearAlgebra.Easy.ST
                             , Numeric.LinearAlgebra.Easy.Types
   build-depends:              base

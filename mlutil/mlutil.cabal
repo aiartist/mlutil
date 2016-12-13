@@ -51,6 +51,7 @@ library
                             , diagrams-lib
                             , diagrams-svg
                             , directory
+                            , easyla
                             , hmatrix
                             , hspec
                             , process

@@ -10,7 +10,7 @@ import qualified Data.Vector.Unboxed as VU
 import           MLUtil
 import           Test.Hspec
 
-m :: Matrix R
+m :: Matrix
 m = matrix 3
     [ 1.0, 2.0, 3.0
     , 4.0, 5.0, 100.0

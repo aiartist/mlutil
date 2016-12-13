@@ -9,8 +9,8 @@ import qualified Data.Vector.Storable as VS
 import qualified Data.Vector.Unboxed as VU
 import           MLUtil
 import           MLUtil ((|||))
-import           MLUtil.Graphics hiding ((|||))
-import           Graphics.Rendering.Chart.Easy hiding (Matrix)
+import           MLUtil.Graphics hiding ((|||), Vector)
+import           Graphics.Rendering.Chart.Easy hiding (Matrix, Vector)
 
 waveform :: (Double -> Double) -> [Double] -> [(Double, Double)]
 waveform f xs = [ (x, f x) | x <- xs ]
@@ -35,7 +35,7 @@ createSigmoidFigures = do
         [ mkRPlot (line "sigmoid(x)" [waveform sigmoid [-60.0, -59.0 .. 60.0]]) ]
 
     Just m@LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-    let values = ones (rows lmValues) 1 ||| lmValues
+    let values = ones (rows lmValues, 1) ||| lmValues
         labels = col (map fromIntegral (VU.toList lmLabelIds))
         r = gradAscent 0.001 500 values labels
         plots = (mkRPlot $ line "best-fit line" [waveform (bestFitLine r) [-3.0, -2.9 .. 3.0]])
@@ -50,7 +50,7 @@ createSigmoidFigures = do
         plots
 
     Just m@LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-    let values = ones (rows lmValues) 1 ||| lmValues
+    let values = ones (rows lmValues, 1) ||| lmValues
         labels = col (map fromIntegral (VU.toList lmLabelIds))
         r = stocGradAscent0 0.01 values labels
         plots = (mkRPlot $ line "best-fit line" [waveform (bestFitLine r) [-3.0, -2.9 .. 3.0]])
@@ -79,7 +79,7 @@ createSigmoidFigures = do
         }
         plots
 
-    let values = ones (rows lmValues) 1 ||| lmValues
+    let values = ones (rows lmValues, 1) ||| lmValues
         labels = col (map fromIntegral (VU.toList lmLabelIds))
         rowCount = rows values
         Just eiAction = choiceExtractIndices rowCount rowCount
@@ -98,7 +98,7 @@ createSigmoidFigures = do
         plots
 
 -- cf logRegres.plotBestFit
-bestFitLine :: Matrix R -> Double -> Double
+bestFitLine :: Matrix -> Double -> Double
 bestFitLine weights x =
     let w0 = weights `atIndex` (0, 0)
         w1 = weights `atIndex` (1, 0)
@@ -108,7 +108,7 @@ bestFitLine weights x =
 testGradAscent :: IO ()
 testGradAscent = do
     Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-    let values = ones (rows lmValues) 1 ||| lmValues
+    let values = ones (rows lmValues, 1) ||| lmValues
         labels = col (map fromIntegral (VU.toList lmLabelIds))
         r = gradAscent 0.001 500 values labels
     print r
@@ -116,7 +116,7 @@ testGradAscent = do
 testStocGradAscent :: IO ()
 testStocGradAscent = do
     Just LabelledMatrix{..} <- getDataFileName "testSet.txt" >>= readLabelledMatrix
-    let values = ones (rows lmValues) 1 ||| lmValues
+    let values = ones (rows lmValues, 1) ||| lmValues
         labels = col (map fromIntegral (VU.toList lmLabelIds))
         r0 = stocGradAscent0 0.01 values labels
         rowCount = rows values
@@ -155,7 +155,7 @@ colicTest = do
     putStrLn $ "errorRate=" ++ show errorRate
 
 -- cf logRegres.classifyVector
-classifyVector :: VS.Vector R -> VS.Vector R -> Int
+classifyVector :: Vector -> Vector -> Int
 classifyVector inX weights =
     let prob = sigmoid (sumElements (mulElements inX weights))
     in if prob > 0.5

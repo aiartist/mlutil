@@ -1,6 +1,7 @@
 resolver: lts-7.9
 packages:
 - .
+- ../easyla
 - ../mlutil
 extra-deps:
 - hmatrix-0.18.0.0

@@ -13,7 +13,7 @@ import           MLUtil
 import           Test.Hspec
 
 -- cf kNN.createDataSet
-values :: Matrix R
+values :: Matrix
 values = matrix 2
     [ 1.0, 1.1
     , 1.0, 1.0

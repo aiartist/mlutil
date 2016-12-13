@@ -21,7 +21,7 @@ argSort xs = VS.fromList (L.map snd $ L.sortBy (\(x0, _) (x1, _) -> compare x0 x
 type IndexVector = VU.Vector Int
 
 -- Based on NumPy's argsort function
-argSort :: Vector R -> IndexVector
+argSort :: Vector -> IndexVector
 argSort xs = runST $ do
     let l = VS.length xs
     t0 <- VUM.new l
