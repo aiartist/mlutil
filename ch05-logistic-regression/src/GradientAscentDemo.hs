@@ -157,7 +157,7 @@ colicTest = do
 -- cf logRegres.classifyVector
 classifyVector :: Vector -> Vector -> Int
 classifyVector inX weights =
-    let prob = sigmoid (sumElements (mulElements inX weights))
+    let prob = sigmoid (sumElements (inX * weights))
     in if prob > 0.5
         then 1
         else 0

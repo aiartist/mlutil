@@ -1,7 +1,5 @@
 module Ch05LogisticRegression.GradientAscent
-    ( addElements
-    , gradAscent
-    , mulElements
+    ( gradAscent
     , sigmoid
     , stocGradAscent0
     , stocGradAscent0History
@@ -43,10 +41,10 @@ stocGradAscent0 alpha values labels =
         (\i weights ->
             let r = rows' !! i -- Bad, bad, bad
                 label = labels `atIndex` (i, 0)
-                h = sigmoid $ sumElements (mulElements r weights)
+                h = sigmoid $ sumElements (r * weights)
                 err = label - h
                 weightsDelta = scale (alpha * err) r
-            in addElements weights weightsDelta)
+            in weights + weightsDelta)
         (VS.replicate n 1) -- initial weights
         [m - 1, m - 2 .. 0])
 
@@ -66,10 +64,10 @@ helper alpha p values labels =
         (\(weights, history) i ->
             let r = rows' !! i -- Bad, bad, bad
                 label = labels `atIndex` (i, 0)
-                h = sigmoid $ sumElements (mulElements r weights)
+                h = sigmoid $ sumElements (r * weights)
                 err = label - h
                 weightsDelta = scale (alpha * err) r
-                weights' = addElements weights weightsDelta
+                weights' = weights + weightsDelta
             in (weights', history ++ [weights'])) -- TODO: Tweak fold since concatenation is O(N) I think
         p
         [0 .. m - 1]
@@ -92,15 +90,9 @@ stocGradAscent1Helper rows'' labels'' j ei weights =
     in foldl
     (\weights (i, (r, label)) ->
         let alpha = 4.0 / (1.0 + fromIntegral (j + i)) + 0.0001
-            h = sigmoid $ sumElements (mulElements r weights)
+            h = sigmoid $ sumElements (r * weights)
             err = label - h
             weightsDelta = scale (alpha * err) r
-        in addElements weights weightsDelta)
+        in weights + weightsDelta)
     weights
     (zip [0 ..] rows')
-
-mulElements :: Vector -> Vector -> Vector
-mulElements = VS.zipWith (*)
-
-addElements :: Vector -> Vector -> Vector
-addElements = VS.zipWith (+)
